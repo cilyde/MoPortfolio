@@ -5,6 +5,7 @@ import { runtime } from "../lib/runtime";
 import { SplitChars } from "./Split";
 import { setText, useLiveStats } from "./live";
 import LiquidGlass from "./LiquidGlass";
+import { PillarCaption } from "./PillarCaption";
 
 /** Scroll stops (in vh from the top of the section) → scene keyframe + chapter. */
 const STOPS = [
@@ -80,6 +81,9 @@ export function World() {
       ))}
 
       <div className="sticky top-0 h-[100svh] overflow-hidden">
+        {/* Pillar Floating Caption Box */}
+        <PillarCaption />
+
         {/* Sculpture interactive focus bounds */}
         <div aria-hidden="true" data-cursor="focus" className="absolute inset-y-[14%] right-0 hidden w-1/2 wide:block" />
         <div aria-hidden="true" className="scrim-bottom pointer-events-none absolute inset-x-0 bottom-0 h-[64%] wide:hidden" />
@@ -190,7 +194,15 @@ function Disciplines({ chapter }: { chapter: number }) {
           return (
             <li
               key={item.name}
-              className={`mono flex items-center gap-3 transition-colors duration-700 ${on ? "text-bone" : "text-ash"}`}
+              onMouseEnter={() => {
+                runtime.manualHoverPillar = item.chapter - 1;
+              }}
+              onMouseLeave={() => {
+                runtime.manualHoverPillar = null;
+              }}
+              className={`mono flex items-center gap-3 transition-colors duration-500 cursor-pointer ${
+                on ? "text-bone" : "text-ash hover:text-bone/85"
+              }`}
             >
               <span
                 aria-hidden="true"

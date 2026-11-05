@@ -3,7 +3,7 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import type { Capabilities } from "../lib/runtime";
+import { runtime, type Capabilities } from "../lib/runtime";
 import { Director } from "./Director";
 import { createStudioEnvironment } from "./environment";
 import { Sculpture, SHELLS, TWIST_MAX } from "./Sculpture";
@@ -310,7 +310,8 @@ export class Experience {
     this.backdrop.update(p, sx, sy);
     this.dust.update(t, p.dust);
     this.blueprint.update(p.blueprint, s.twist[0], p.heightMul);
-    this.rogueElements.update(dt, p, t, this.mouseSmooth, this.spins, s.twist);
+    this.rogueElements.update(dt, p, t, this.mouseSmooth, this.camera.position, this.spins, s.twist);
+    this.rogueElements.checkHover(this.raycaster, this.camera, this.width, this.height, runtime.manualHoverPillar);
 
     const fu = this.finalPass.uniforms;
     fu.uTime.value = t;

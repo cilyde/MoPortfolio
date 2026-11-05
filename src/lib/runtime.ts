@@ -39,16 +39,28 @@ interface Runtime {
   lenis: Lenis | null;
   experience: Experience | null;
   caps: Capabilities | null;
+  manualHoverPillar: number | null;
 }
 
-export const runtime: Runtime = { lenis: null, experience: null, caps: null };
+export const runtime: Runtime = { lenis: null, experience: null, caps: null, manualHoverPillar: null };
+
+export interface PillarHoverState {
+  index: number;
+  chapter: string;
+  trait: string;
+  subtrait: string;
+  accent: string;
+  screenX: number;
+  screenY: number;
+}
 
 /* ── Global UI state store ─────────────────────────────────────────── */
 interface UIState {
   introDone: boolean;
   section: number;
+  hoveredPillar: PillarHoverState | null;
 }
-const state: UIState = { introDone: false, section: 0 };
+const state: UIState = { introDone: false, section: 0, hoveredPillar: null };
 const listeners = new Set<() => void>();
 
 export function setUI(patch: Partial<UIState>) {
