@@ -9,23 +9,23 @@ export function Experience() {
   const [ref, view] = useViewState<HTMLElement>("-35% 0px -35% 0px");
 
   return (
-    <section ref={ref} aria-labelledby="experience-title" className="relative py-24 px-[var(--gutter)] border-t border-bone/10">
+    <section ref={ref} aria-labelledby="experience-title" className="relative py-16 sm:py-24 px-[var(--gutter)] border-t border-bone/10">
       <div className={`rvl w-full max-w-6xl mx-auto ${viewClass(view)}`}>
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-10">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 sm:pb-10">
           <div>
-            <p className="rv mono text-mist">
+            <p className="rv mono text-mist text-[10.5px] sm:text-xs">
               <span className="text-bone-2 mr-2">(06)</span> Career Path
             </p>
-            <h2 id="experience-title" className="display mt-3 text-[clamp(2.4rem,6vw,5.5rem)]">
+            <h2 id="experience-title" className="display mt-2.5 sm:mt-3 text-[clamp(2.2rem,6vw,5.5rem)]">
               Work <span className="text-bone/80 italic font-serif">History</span>
             </h2>
           </div>
-          <p className="rv mt-3 sm:mt-0 max-w-sm text-xs mono text-mist" style={d(80)}>
+          <p className="rv mt-2.5 sm:mt-0 max-w-sm text-xs mono text-mist" style={d(80)}>
             Leadership, architectures shipped, teams elevated.
           </p>
         </div>
 
-        <div className="space-y-8 mt-6">
+        <div className="space-y-6 sm:space-y-8 mt-6">
           {experience.map((exp, idx) => (
             <LiquidGlass
               key={exp.company}
@@ -34,14 +34,14 @@ export function Experience() {
               bezel={22}
               thickness={28}
               blur={0.4}
-              className="rv transition-all duration-300 hover:-translate-y-1"
-              contentClassName="p-7 sm:p-9"
+              className="rv transition-all duration-300 hover:-translate-y-1 flex flex-col"
+              contentClassName="p-5 sm:p-9 flex flex-col"
               style={d(idx * 120 + 100)}
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-bone/10 pb-4">
                 <div>
                   <div className="flex items-center gap-3">
-                    <h3 className="font-serif text-xl sm:text-2xl font-normal text-bone">
+                    <h3 className="font-serif text-lg sm:text-2xl font-normal text-bone">
                       {exp.role}
                     </h3>
                     {exp.current && (

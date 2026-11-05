@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useUI, type PillarHoverState } from "../lib/runtime";
+import { runtime, setUI, useUI, type PillarHoverState } from "../lib/runtime";
 
 /**
- * Clean, understated caption box in the top right.
+ * Clean, understated caption box in the top right (bottom center on mobile).
  * Stripped of all jargon — contains strictly the title and description requested.
  * Uses a smooth, flicker-free opacity fade with zero blur snapping.
  */
@@ -14,6 +14,13 @@ export function PillarCaption() {
   useEffect(() => {
     if (hovered) {
       setDisplayPillar(hovered);
+      // On touch devices, clear after 3.8s so it never stays stuck
+      if (runtime.caps?.touch) {
+        const timer = setTimeout(() => {
+          setUI({ hoveredPillar: null });
+        }, 3800);
+        return () => clearTimeout(timer);
+      }
     }
   }, [hovered]);
 
@@ -23,24 +30,24 @@ export function PillarCaption() {
 
   return (
     <div
-      className={`pointer-events-none fixed top-20 sm:top-24 right-[var(--gutter)] z-40 w-[280px] sm:w-[350px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      className={`pointer-events-none fixed bottom-6 sm:bottom-auto sm:top-24 inset-x-4 sm:inset-x-auto sm:right-[var(--gutter)] z-40 max-w-[340px] mx-auto sm:mx-0 w-[calc(100%-32px)] sm:w-[350px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         isVisible
           ? "opacity-100 translate-y-0 scale-100"
-          : "opacity-0 -translate-y-2 scale-[0.98]"
+          : "opacity-0 translate-y-2 sm:-translate-y-2 scale-[0.98]"
       }`}
       style={{ willChange: "opacity, transform" }}
       aria-live="polite"
     >
       <div
-        className="rounded-2xl border border-bone/15 bg-[#0b0c10]/94 p-4 sm:p-5 shadow-2xl"
+        className="rounded-2xl border border-bone/15 bg-[#0b0c10]/94 p-4 sm:p-5 shadow-2xl backdrop-blur-md"
         style={{
           boxShadow: `0 24px 48px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
         }}
       >
-        <h4 className="font-serif text-[18px] sm:text-[19px] font-normal tracking-wide text-bone">
+        <h4 className="font-serif text-[17px] sm:text-[19px] font-normal tracking-wide text-bone">
           {displayPillar.trait}
         </h4>
-        <p className="mono text-[11px] text-mist mt-1.5 leading-relaxed">
+        <p className="mono text-[10.5px] sm:text-[11px] text-mist mt-1 leading-relaxed">
           {displayPillar.subtrait}
         </p>
       </div>

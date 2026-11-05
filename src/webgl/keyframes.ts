@@ -71,7 +71,7 @@ export const BASE: Params = {
   fov: 32,
   shiftX: 0.3,
   shiftY: 0,
-  mShiftY: 0.26,
+  mShiftY: 0.24,
 
   twist: 1,
   spin: 1,

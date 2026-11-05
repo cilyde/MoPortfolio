@@ -146,7 +146,7 @@ export function Nav() {
   return (
     <>
       <header
-        className={`pointer-events-none fixed inset-x-0 top-0 z-40 flex justify-center px-4 pt-4 sm:pt-6 transition-opacity duration-700 ${
+        className={`pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 sm:px-4 pt-[max(12px,env(safe-area-inset-top))] sm:pt-6 transition-opacity duration-700 ${
           introDone ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -287,7 +287,7 @@ export function Nav() {
 
       {/* Mobile Menu Panel */}
       <div
-        className={`fixed inset-0 z-50 flex flex-col justify-between bg-ink/95 px-6 pb-12 pt-28 backdrop-blur-2xl transition-all duration-500 wide:hidden ${
+        className={`fixed inset-0 z-40 flex flex-col justify-between bg-ink/95 px-6 pb-[max(24px,env(safe-area-inset-bottom))] pt-[max(92px,calc(env(safe-area-inset-top)+76px))] backdrop-blur-2xl transition-all duration-500 wide:hidden ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >

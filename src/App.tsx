@@ -171,6 +171,11 @@ export default function App() {
       </a>
       {glOk ? <canvas ref={canvasRef} className="gl-canvas" aria-hidden="true" /> : <FallbackArt reduced={caps.reducedMotion} />}
       <div className="grain" aria-hidden="true" />
+      {/* Subtle viewport-fixed bottom ambient vignette for mobile — stays anchored to bottom, NEVER scrolls upward */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-x-0 bottom-0 h-36 z-[2] bg-gradient-to-t from-ink/90 via-ink/40 to-transparent wide:hidden"
+      />
 
       <IntroOverlay />
       <Nav />

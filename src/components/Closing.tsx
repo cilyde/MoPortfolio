@@ -74,7 +74,7 @@ export function Closing() {
             <p className="rv mono text-mist">
               <span className="text-bone-2 mr-2">(07)</span> Direct Contact
             </p>
-            <h2 id="contact-title" className="display mt-5 text-[clamp(3.4rem,9.5vw,10.5rem)]">
+            <h2 id="contact-title" className="display mt-3 sm:mt-5 text-[clamp(2.7rem,9vw,10.5rem)]">
               <SplitChars text="Let's build" className="block" />
               <span className="block text-bone/80 italic font-serif">
                 <SplitChars text="the next one." offset={11} />
@@ -82,20 +82,20 @@ export function Closing() {
             </h2>
           </div>
 
-          <div className="absolute inset-x-[var(--gutter)] top-[calc(50%+4.5svh)] flex flex-col items-center text-center">
+          <div className="absolute inset-x-[var(--gutter)] top-[calc(50%+3svh)] sm:top-[calc(50%+4.5svh)] flex flex-col items-center text-center">
             {/* Liquid Glass Email & Copy Capsule */}
             <div className="rv" style={d(120)}>
               <LiquidGlass
                 tone="dark"
                 radius={36}
                 blur={0.5}
-                contentClassName="px-6 sm:px-8 py-3.5 sm:py-4 flex flex-wrap items-center justify-center gap-4 sm:gap-6"
+                contentClassName="px-4 sm:px-8 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6"
               >
                 <Magnetic strength={0.2}>
                   <a
                     href={`mailto:${site.email}`}
                     data-cursor="link"
-                    className="font-serif text-[clamp(1.5rem,3.2vw,2.8rem)] leading-none text-bone hover:text-bone-2 transition-colors"
+                    className="font-serif text-[clamp(1.15rem,4.5vw,2.8rem)] leading-none text-bone hover:text-bone-2 transition-colors break-all sm:break-normal text-center"
                   >
                     {site.email}
                   </a>
@@ -107,20 +107,20 @@ export function Closing() {
                   type="button"
                   onClick={copy}
                   data-cursor="link"
-                  className="rounded-full border border-bone/20 bg-bone/10 px-4 py-1.5 font-mono text-xs uppercase tracking-wider text-bone transition-all hover:bg-bone hover:text-ink"
+                  className="rounded-full border border-bone/20 bg-bone/10 px-4 py-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-bone transition-all hover:bg-bone hover:text-ink w-full sm:w-auto text-center"
                 >
                   {copyLabel}
                 </button>
               </LiquidGlass>
             </div>
 
-            <div className="rv mono mt-5 flex items-center justify-center gap-2 text-mist text-xs" style={d(200)}>
+            <div className="rv mono mt-4 sm:mt-5 flex items-center justify-center gap-2 text-mist text-xs" style={d(200)}>
               <span className="pulse-dot" aria-hidden="true" />
               <span>{site.availability}</span>
             </div>
 
             {/* Social pills */}
-            <ul className="rv mono mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-3" style={d(280)}>
+            <ul className="rv mono mt-5 sm:mt-8 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 gap-y-2.5 sm:gap-y-3" style={d(280)}>
               {site.socials.map((s) => (
                 <li key={s.label}>
                   <Magnetic strength={0.25}>
@@ -133,8 +133,8 @@ export function Closing() {
                       radius={20}
                       tone="dark"
                       blur={0.4}
-                      className="transition-transform duration-300 hover:scale-105"
-                      contentClassName="px-4 py-1.5 flex items-center gap-1.5 text-xs text-mist hover:text-bone"
+                      className="group inline-flex transition-transform duration-300 hover:scale-105"
+                      contentClassName="px-3.5 sm:px-4 py-1.5 flex items-center gap-1.5 text-xs text-mist transition-colors group-hover:text-bone"
                     >
                       <span>{s.label}</span>
                       <span aria-hidden="true">↗</span>
@@ -147,7 +147,7 @@ export function Closing() {
 
           {/* Footer bar */}
           <footer
-            className="rv mono absolute inset-x-[var(--gutter)] bottom-5 flex flex-col items-center gap-2 text-ash text-[10.5px] wide:flex-row wide:justify-between"
+            className="rv mono absolute inset-x-[var(--gutter)] bottom-[max(16px,env(safe-area-inset-bottom))] flex flex-col items-center gap-2 text-ash text-[10.5px] wide:flex-row wide:justify-between"
             style={d(360)}
           >
             <span>

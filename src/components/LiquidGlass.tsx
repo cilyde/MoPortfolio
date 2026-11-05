@@ -123,6 +123,9 @@ export default function LiquidGlass<T extends ElementType = "div">({
   const scale = maps ? maps.scale * 2 * refraction : 0;
   const glassStyle: CSSProperties = maps ? { backdropFilter: `url(#${id})` } : {};
 
+  const isInline = as === "span" || as === "button" || as === "a";
+  const ContentTag = (isInline ? "span" : "div") as ElementType;
+
   return (
     <Tag
       ref={ref}
@@ -191,7 +194,7 @@ export default function LiquidGlass<T extends ElementType = "div">({
       )}
       <span className="lg-tint" aria-hidden />
       <span className="lg-rim" aria-hidden />
-      <span className={`lg-content ${contentClassName}`}>{children}</span>
+      <ContentTag className={`lg-content ${contentClassName}`}>{children}</ContentTag>
     </Tag>
   );
 }

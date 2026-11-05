@@ -89,7 +89,6 @@ function ProjectBlock({
           data-cursor="focus"
           className={`absolute inset-y-[14%] hidden w-1/2 wide:block ${textLeft ? "right-0" : "left-0"}`}
         />
-        <div aria-hidden="true" className="scrim-bottom pointer-events-none absolute inset-x-0 bottom-0 h-[72%] wide:hidden" />
 
         <div className={`rvl absolute inset-0 ${viewClass(view)}`} style={{ "--accent": p.accent } as CSSProperties}>
           {/* Giant background index number */}
@@ -104,33 +103,33 @@ function ProjectBlock({
 
           {/* Project card content */}
           <div
-            className={`absolute bottom-[6svh] left-[var(--gutter)] right-[var(--gutter)] wide:bottom-auto wide:top-1/2 wide:max-w-[min(46vw,720px)] wide:-translate-y-1/2 ${
+            className={`absolute bottom-[4svh] sm:bottom-[6svh] left-[var(--gutter)] right-[var(--gutter)] wide:bottom-auto wide:top-1/2 wide:max-w-[min(46vw,720px)] wide:-translate-y-1/2 ${
               textLeft ? "wide:right-auto" : "wide:left-auto"
             }`}
           >
-            <div className="rv mono flex flex-wrap items-center gap-x-4 gap-y-2 text-mist">
+            <div className="rv mono flex flex-wrap items-center gap-x-3 sm:gap-x-4 gap-y-1 text-mist text-[10.5px] sm:text-xs">
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.accent, boxShadow: `0 0 8px ${p.accent}` }} />
               <span style={{ color: "var(--accent)" }}>{p.index}</span>
-              <span className="-ml-2 text-ash">/ 05</span>
-              <span className="h-px w-8 bg-bone/20" aria-hidden="true" />
+              <span className="-ml-1 text-ash">/ 05</span>
+              <span className="h-px w-6 sm:w-8 bg-bone/20" aria-hidden="true" />
               <span className="text-bone">{p.kind}</span>
               <span>{p.year}</span>
             </div>
 
-            <h3 id={`${p.id}-title`} className="display mt-5 text-[clamp(3.8rem,10.5vw,10.5rem)] leading-[0.84] tracking-[-0.035em]">
+            <h3 id={`${p.id}-title`} className="display mt-2 sm:mt-5 text-[clamp(2.5rem,8.2vw,10.5rem)] leading-[0.88] sm:leading-[0.84] tracking-[-0.035em]">
               <SplitChars text={p.title} className={p.italic ? "italic text-bone-2" : ""} />
             </h3>
 
-            <div className="rv mt-3 mono text-xs" style={{ color: p.accent, ...d(60) }}>
+            <div className="rv mt-1.5 sm:mt-3 mono text-[11px] sm:text-xs" style={{ color: p.accent, ...d(60) }}>
               {p.metric.startsWith("★") ? p.metric : `★ ${p.metric}`}
             </div>
 
-            <p className="rv mt-4 max-w-[34rem] text-[15px] leading-[1.6] text-bone/90 wide:text-[17px]" style={d(100)}>
+            <p className="rv mt-2.5 sm:mt-4 max-w-[34rem] text-[13.5px] sm:text-[15px] leading-[1.5] sm:leading-[1.6] text-bone/90 wide:text-[17px]" style={d(100)}>
               {p.summary}
             </p>
 
             {/* Hidden in dots: Interactive visual preview aperture in LiquidGlass */}
-            <div className="rv mt-6 flex items-center gap-4" style={d(140)}>
+            <div className="rv mt-3.5 sm:mt-6 flex items-center gap-4" style={d(140)}>
               <Magnetic strength={0.3}>
                 <LiquidGlass
                   as="button"
@@ -140,8 +139,8 @@ function ProjectBlock({
                   radius={24}
                   tone="dark"
                   blur={0.4}
-                  className="group transition-transform duration-300 hover:scale-[1.03] active:scale-[0.97]"
-                  contentClassName="flex items-center gap-3 px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-bone"
+                  className="group inline-flex transition-transform duration-300 hover:scale-[1.03] active:scale-[0.97]"
+                  contentClassName="flex items-center gap-2.5 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-bone"
                 >
                   <span className="relative flex h-2 w-2">
                     <span
@@ -170,7 +169,7 @@ function ProjectBlock({
             </ul>
 
             {/* Recruiter metadata grid */}
-            <dl className="rv mt-6 grid grid-cols-2 gap-x-6 gap-y-3 border-t border-bone/10 pt-4 sm:grid-cols-3" style={d(240)}>
+            <dl className="rv mt-3 sm:mt-6 grid grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-2 sm:gap-y-3 border-t border-bone/10 pt-2.5 sm:pt-4 sm:grid-cols-3" style={d(240)}>
               <Meta label="Role" value={p.role} />
               <Meta label="Platform" value={p.platform} />
               <Meta label="Tech Stack" value={p.stack} className="col-span-2 sm:col-span-1" />
