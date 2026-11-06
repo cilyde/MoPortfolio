@@ -415,6 +415,8 @@ a.lg,
 span.lg,
 button.lg {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .lg-fallback {
   -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05);

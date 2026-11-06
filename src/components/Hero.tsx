@@ -39,12 +39,14 @@ function RotatingBadge({ size = "md" }: { size?: "sm" | "md" }) {
           </svg>
           <LiquidGlass
             as="span"
-            radius={24}
             tone="dark"
             blur={0.4}
-            className={`grid ${glassSize} place-items-center transition-transform duration-500 group-hover:scale-110 shadow-lg`}
+            className={`flex ${glassSize} items-center justify-center rounded-full transition-transform duration-500 group-hover:scale-110 shadow-lg`}
+            contentClassName="flex h-full w-full items-center justify-center"
           >
-            <span className={`grid ${innerSize} place-items-center rounded-full bg-bone text-ink`}>
+            <span
+              className={`grid ${innerSize} place-items-center rounded-full bg-bone text-ink shadow-[inset_0_1px_1px_rgba(255,255,255,0.6),0_1px_3px_rgba(0,0,0,0.3)] shrink-0 aspect-square`}
+            >
               <ArrowDown className={`${iconSize} transition-transform duration-500 group-hover:translate-y-0.5`} />
             </span>
           </LiquidGlass>
@@ -86,7 +88,7 @@ export function Hero() {
       <div className="absolute inset-x-[var(--gutter)] bottom-5 z-10 wide:bottom-[max(180px,22svh)] wide:left-[var(--gutter)] wide:right-auto wide:max-w-[min(54vw,880px)]">
         <div data-hero-fade className="relative">
           {/* Eyebrow in delicate LiquidGlass capsule */}
-          <div data-reveal="eyebrow" className="mb-3 sm:mb-4 inline-block wide:mb-7">
+          <div data-reveal="eyebrow" className="mb-3 sm:mb-4 hidden sm:inline-block wide:mb-7">
             <LiquidGlass
               tone="dark"
               radius={24}
@@ -132,22 +134,8 @@ export function Hero() {
           </div>
 
           {/* Mobile-only status & cue row seamlessly integrated with the hero cluster */}
-          <div className="mt-4 flex items-center justify-between pt-1 wide:hidden">
-            <div className="flex items-center gap-2.5">
-              <RotatingBadge size="sm" />
-              <button
-                type="button"
-                onClick={() => scrollToTarget(heroConfig.scrollTarget, 2.2)}
-                className="mono text-[9.5px] text-mist/90 transition-colors hover:text-bone"
-              >
-                {heroConfig.scrollPromptMobile}
-              </button>
-            </div>
-
-            <div className="mono text-right text-mist text-[9px]">
-              <span className="block text-bone">{site.availability}</span>
-              <span className="block text-ash">{site.coords}</span>
-            </div>
+          <div className="mt-4 flex items-center pt-1 wide:hidden">
+            <RotatingBadge size="sm" />
           </div>
         </div>
       </div>
@@ -157,20 +145,8 @@ export function Hero() {
         data-hero-fade
         className="pointer-events-none absolute inset-x-[var(--gutter)] bottom-6 hidden items-end justify-between wide:flex"
       >
-        <div className="pointer-events-auto flex items-center gap-6">
+        <div className="pointer-events-auto flex items-center">
           <RotatingBadge />
-          <Magnetic strength={0.3}>
-            <button
-              type="button"
-              data-reveal="cue"
-              data-cursor="link"
-              onClick={() => scrollToTarget(heroConfig.scrollTarget, 2.2)}
-              className="mono flex items-center gap-3 text-mist transition-colors hover:text-bone"
-            >
-              <span className="h-px w-6 bg-bone/40 -translate-y-px" aria-hidden="true" />
-              {heroConfig.scrollPrompt}
-            </button>
-          </Magnetic>
         </div>
 
         <div data-reveal="meta" className="mono text-right text-mist">

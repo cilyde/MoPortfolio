@@ -33,7 +33,6 @@ export function World() {
   const ref = useRef<HTMLElement>(null);
   const [chapter, setChapter] = useState(0);
   const [inView, setInView] = useState(false);
-  const touch = runtime.caps?.touch ?? false;
 
   useEffect(() => {
     const el = ref.current;
@@ -135,14 +134,7 @@ export function World() {
                 {f.text}
               </p>
 
-              {f.id === "light" ? (
-                <LiveAperture />
-              ) : f.hint ? (
-                <p className="rv mono mt-3 sm:mt-5 flex items-center gap-3 text-bone/80 text-[10px]" style={d(180)}>
-                  <span className="h-px w-6 bg-lime" aria-hidden="true" />
-                  {touch && f.hintTouch ? f.hintTouch : f.hint}
-                </p>
-              ) : null}
+              {f.id === "light" && <LiveAperture />}
             </div>
           </div>
         ))}
