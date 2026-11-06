@@ -1,8 +1,10 @@
 import type { CSSProperties } from "react";
-import { stackCategories } from "../content";
+import { config } from "../config";
 import { useViewState, viewClass } from "../lib/runtime";
 import LiquidGlass from "./LiquidGlass";
 
+const stackConfig = config.stack;
+const stackCategories = stackConfig.categories;
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export function Stack() {
@@ -14,14 +16,14 @@ export function Stack() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 sm:pb-8">
           <div>
             <p className="rv mono text-mist text-[10.5px] sm:text-xs">
-              <span className="text-bone-2 mr-2">(05)</span> Technology Arsenal
+              <span className="text-bone-2 mr-2">{stackConfig.sectionNumber}</span> {stackConfig.sectionTitle}
             </p>
             <h2 id="stack-title" className="display mt-2.5 sm:mt-3 text-[clamp(2.2rem,6vw,5.5rem)]">
-              Core <span className="text-bone/80 italic font-serif">Skills</span> & Tools
+              {stackConfig.headingLine1} <span className="text-bone/80 italic font-serif">{stackConfig.headingLine2}</span> {stackConfig.headingSuffix}
             </h2>
           </div>
           <p className="rv mt-2.5 sm:mt-0 max-w-sm text-xs mono text-mist" style={d(80)}>
-            Battle-tested production toolsets.
+            {stackConfig.description}
           </p>
         </div>
 

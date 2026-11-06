@@ -107,7 +107,7 @@ export default function LiquidGlass<T extends ElementType = "div">({
     };
   }, [interactiveRim]);
 
-  const r = radius ?? (size.h > 0 ? size.h / 2 : 16);
+  const r = radius ?? (size.h > 0 ? size.h / 2 : 9999);
   const maps = useMemo(() => {
     if (!refract || !SUPPORTS_SVG_BACKDROP || size.w < 6 || size.h < 6) return null;
     const bz = bezel ?? Math.min(size.w, size.h) * 0.38;

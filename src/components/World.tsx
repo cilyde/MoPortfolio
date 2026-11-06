@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { forces } from "../content";
+import { config } from "../config";
 import { runtime } from "../lib/runtime";
 import { SplitChars } from "./Split";
 import { setText, useLiveStats } from "./live";
 import LiquidGlass from "./LiquidGlass";
 import { PillarCaption } from "./PillarCaption";
+
+const worldConfig = config.world;
+const DISCIPLINES = worldConfig.disciplines;
+const forces = worldConfig.forces;
 
 /** Scroll stops (in vh from the top of the section) → scene keyframe + chapter. */
 const STOPS = [
@@ -18,16 +22,9 @@ const STOPS = [
   { kf: "light", at: 505, chapter: 5 },
   { kf: "light-closed", at: 565, chapter: 5 },
   { kf: "synthesis", at: 655, chapter: 6 },
+  { kf: "synthesis", at: 775, chapter: 6 },
 ];
-const SPAN = 655;
-
-const DISCIPLINES = [
-  { name: "Dev at the Core", tag: "01 Bedrock", chapter: 1 },
-  { name: "Advanced AI", tag: "02 Engine", chapter: 2 },
-  { name: "Business Data Analytics", tag: "03 Signal", chapter: 3 },
-  { name: "Psychology & Cognition", tag: "04 Touch", chapter: 4 },
-  { name: "Photography & Optics", tag: "05 Craft", chapter: 5 },
-];
+const SPAN = 775;
 
 const panelClass = (i: number, active: number) => (i === active ? "is-in" : i < active ? "is-out" : "");
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
@@ -55,7 +52,7 @@ export function World() {
     const vis = ScrollTrigger.create({
       trigger: el,
       start: "top 62%",
-      end: "bottom 38%",
+      end: "bottom 20%",
       onToggle: (self) => setInView(self.isActive),
     });
     return () => {
@@ -64,15 +61,19 @@ export function World() {
     };
   }, []);
 
-  const active = inView ? chapter : chapter >= 6 ? 7 : -1;
+  const active = inView ? chapter : chapter >= 6 ? 6 : -1;
   const counter =
-    chapter >= 1 && chapter <= 5 ? `${String(chapter).padStart(2, "0")} / 05` : chapter === 6 ? "Synthesis" : "Five Forces";
+    chapter >= 1 && chapter <= 5
+      ? `${String(chapter).padStart(2, "0")} / ${worldConfig.counterTotal}`
+      : chapter === 6
+      ? worldConfig.counterSynthesis
+      : worldConfig.counterFallback;
 
   return (
-    <section id="world" ref={ref} aria-labelledby="world-title" className="relative" style={{ height: `${SPAN + 100}vh` }}>
-      {STOPS.map((s) => (
+    <section id="world" ref={ref} aria-labelledby="world-title" aria-label={worldConfig.ariaLabel} className="relative" style={{ height: `${SPAN + 100}vh` }}>
+      {STOPS.map((s, idx) => (
         <div
-          key={s.kf}
+          key={`${s.kf}-${idx}`}
           data-kf={s.kf}
           aria-hidden="true"
           className="pointer-events-none absolute left-0 h-px w-px"
@@ -89,27 +90,27 @@ export function World() {
 
         {/* Section label */}
         <div
-          className={`rvl absolute left-[var(--gutter)] right-[var(--gutter)] top-[max(74px,10svh)] flex items-center justify-between wide:top-[14svh] ${
+          className={`rvl absolute left-[var(--gutter)] right-[var(--gutter)] top-[max(98px,calc(env(safe-area-inset-top)+78px))] sm:top-[max(104px,12svh)] flex items-center justify-between wide:top-[14svh] ${
             inView ? "is-in" : ""
           }`}
         >
           <p className="rv mono text-mist text-[10px] sm:text-[11px]">
-            <span className="text-bone-2 mr-2">(02)</span> Craft & Philosophy
+            <span className="text-bone-2 mr-2">{worldConfig.sectionNumber}</span> {worldConfig.sectionTitle}
           </p>
           <p className="rv mono tabular-nums text-mist text-[10px] sm:text-[11px]">{counter}</p>
         </div>
 
         {/* 0 — Introduction */}
         <div className={`rvl rvl-hide absolute inset-0 ${panelClass(0, active)}`}>
-          <div className="absolute bottom-[8svh] sm:bottom-[13svh] left-[var(--gutter)] right-[var(--gutter)] wide:bottom-auto wide:right-auto wide:top-[28svh] wide:max-w-[min(48vw,800px)]">
+          <div className="absolute bottom-[max(24px,env(safe-area-inset-bottom))] sm:bottom-10 left-[var(--gutter)] right-[var(--gutter)] wide:bottom-auto wide:right-auto wide:top-[38svh] wide:max-w-[min(48vw,800px)]">
             <h2 id="world-title" className="display text-[clamp(2.8rem,8vw,9.2rem)]">
-              <SplitChars text="One mind," className="block" />
+              <SplitChars text={worldConfig.intro.headingLine1} className="block" />
               <span className="block text-bone/80 italic font-serif">
-                <SplitChars text="five forces." offset={9} />
+                <SplitChars text={worldConfig.intro.headingLine2} offset={9} />
               </span>
             </h2>
             <p className="rv mt-4 sm:mt-8 max-w-[31rem] text-[14px] sm:text-[15px] leading-[1.6] sm:leading-[1.65] text-mist wide:text-[17px]" style={d(120)}>
-              Great mobile apps need clean code, useful AI, and thoughtful design. Nothing extra.
+              {worldConfig.intro.description}
             </p>
           </div>
         </div>
@@ -117,7 +118,7 @@ export function World() {
         {/* 1–5 — The Forces */}
         {forces.map((f, i) => (
           <div key={f.id} className={`rvl rvl-hide absolute inset-0 ${panelClass(i + 1, active)}`}>
-            <div className="absolute bottom-[6svh] sm:bottom-[10svh] left-[var(--gutter)] right-[var(--gutter)] wide:bottom-auto wide:right-auto wide:top-[24svh] wide:max-w-[min(44vw,700px)]">
+            <div className="absolute bottom-[max(20px,env(safe-area-inset-bottom))] sm:bottom-8 left-[var(--gutter)] right-[var(--gutter)] wide:bottom-auto wide:right-auto wide:top-[38svh] wide:max-w-[min(44vw,700px)]">
               <p className="rv mono flex flex-wrap items-center gap-x-3 gap-y-1 text-mist text-[10.5px] sm:text-[11px]">
                 <span className="text-bone-2">{f.index}</span>
                 <span className="h-px w-6 bg-bone/25" aria-hidden="true" />
@@ -150,23 +151,25 @@ export function World() {
         <div className={`rvl rvl-hide absolute inset-0 ${panelClass(6, active)}`}>
           <div aria-hidden="true" className="scrim-radial absolute inset-0" />
           <div className="absolute inset-x-[var(--gutter)] top-1/2 -translate-y-1/2 text-center">
-            <p className="rv mono text-mist">(06) — Synthesis</p>
+            <p className="rv mono text-mist">{worldConfig.synthesis.tag}</p>
             <h3 className="display mt-6 text-[clamp(2.8rem,7.8vw,8.5rem)]">
-              <SplitChars text="Not five silos." className="block" />
+              <SplitChars text={worldConfig.synthesis.headingLine1} className="block" />
               <span className="block text-bone/80 italic font-serif">
-                <SplitChars text="One unified craft." offset={16} />
+                <SplitChars text={worldConfig.synthesis.headingLine2} offset={16} />
               </span>
             </h3>
             <p className="rv mx-auto mt-6 max-w-[35rem] text-[15px] leading-[1.65] text-mist wide:text-[17px]" style={d(220)}>
-              Solid code, useful AI, and clear numbers.
+              {worldConfig.synthesis.description}
             </p>
           </div>
         </div>
 
         {/* Live HUD telemetry readouts */}
         <div
-          className={`rvl pointer-events-none absolute inset-x-[var(--gutter)] bottom-[6svh] hidden items-end justify-between wide:flex ${
-            inView && chapter < 6 ? "is-in" : inView ? "is-out" : ""
+          className={`rvl pointer-events-none absolute inset-x-[var(--gutter)] bottom-[6svh] hidden items-end justify-between wide:flex transition-all duration-700 ${
+            inView && chapter < 6
+              ? "is-in opacity-100 translate-y-0"
+              : "is-out opacity-0 pointer-events-none translate-y-4"
           }`}
         >
           <Disciplines chapter={chapter} />
@@ -184,9 +187,10 @@ function Disciplines({ chapter }: { chapter: number }) {
       radius={20}
       blur={0.4}
       contentClassName="px-4 py-3"
-      className="pointer-events-auto"
+      className="rv pointer-events-auto"
+      style={d(120)}
     >
-      <ul className="space-y-[6px]" aria-label="Disciplines">
+      <ul className="space-y-[6px]" aria-label={worldConfig.disciplinesAriaLabel}>
         {DISCIPLINES.map((item) => {
           const on = chapter === item.chapter || (chapter === 0 && item.chapter === 1);
           const core = item.chapter === 1;
@@ -237,17 +241,22 @@ function Readouts({ chapter }: { chapter: number }) {
     setText(aperture.current, `ƒ/${s.fNumber.toFixed(1)}`);
   });
 
-  const rows = [
-    { label: "Twist φ", ref: twist, ch: [1], fallback: "126.0°" },
-    { label: "Members", ref: members, ch: [1], fallback: "768" },
-    { label: "Flow Field", ref: flow, ch: [2], fallback: "0.06" },
-    { label: "Data Order", ref: order, ch: [3], fallback: "0%" },
-    { label: "Attention", ref: attention, ch: [4], fallback: "1.00" },
-    { label: "Aperture", ref: aperture, ch: [5], fallback: "ƒ/2.8" },
-  ];
+  const refMap: Record<string, React.RefObject<HTMLSpanElement | null>> = {
+    "Twist φ": twist,
+    Members: members,
+    "Flow Field": flow,
+    "Data Order": order,
+    Attention: attention,
+    Aperture: aperture,
+  };
+
+  const rows = worldConfig.telemetry.map((t) => ({
+    ...t,
+    ref: refMap[t.label],
+  }));
 
   return (
-    <dl className="rv w-[15rem] space-y-[6px]" style={d(160)} aria-label="Live sculpture state">
+    <dl className="rv w-[15rem] space-y-[6px]" style={d(160)} aria-label={worldConfig.telemetryAriaLabel}>
       {rows.map((r) => {
         const on = r.ch.includes(chapter);
         return (
@@ -270,13 +279,13 @@ function Readouts({ chapter }: { chapter: number }) {
 
 function LiveAperture() {
   const ref = useRef<HTMLSpanElement>(null);
-  useLiveStats((s) => setText(ref.current, s ? `ƒ/${s.fNumber.toFixed(1)}` : "ƒ/2.8"));
+  useLiveStats((s) => setText(ref.current, s ? `ƒ/${s.fNumber.toFixed(1)}` : worldConfig.liveAperture.fallbackValue));
   return (
     <p className="rv mt-6 flex items-baseline gap-4" style={d(180)}>
       <span ref={ref} className="font-serif text-[clamp(2.4rem,4vw,3.6rem)] italic leading-none tabular-nums text-bone">
-        ƒ/1.4
+        {worldConfig.liveAperture.initialDisplayValue}
       </span>
-      <span className="mono text-mist">Camera perspective: overhead orbital plane</span>
+      <span className="mono text-mist">{worldConfig.liveAperture.cameraPerspective}</span>
     </p>
   );
 }

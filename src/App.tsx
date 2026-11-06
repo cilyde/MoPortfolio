@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { detectCapabilities, runtime, setUI } from "./lib/runtime";
+import { config } from "./config";
 import { createSmoothScroll } from "./lib/lenis";
 import { prepareIntroScene, prepareUI, runIntro } from "./lib/motion";
 import { Experience } from "./webgl/Experience";
@@ -166,16 +167,11 @@ export default function App() {
 
   return (
     <>
-      <a href="#main" className="skip-link">
-        Skip to content
+      <a href={config.navigation.skipLink.href} className="skip-link">
+        {config.navigation.skipLink.text}
       </a>
       {glOk ? <canvas ref={canvasRef} className="gl-canvas" aria-hidden="true" /> : <FallbackArt reduced={caps.reducedMotion} />}
       <div className="grain" aria-hidden="true" />
-      {/* Subtle viewport-fixed bottom ambient vignette for mobile — stays anchored to bottom, NEVER scrolls upward */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-x-0 bottom-0 h-36 z-[2] bg-gradient-to-t from-ink/90 via-ink/40 to-transparent wide:hidden"
-      />
 
       <IntroOverlay />
       <Nav />

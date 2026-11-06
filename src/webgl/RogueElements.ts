@@ -2,88 +2,9 @@ import * as THREE from "three";
 import type { Params } from "./keyframes";
 import type { ShellDef } from "./Sculpture";
 import { setUI } from "../lib/runtime";
-
-export interface RogueDef {
-  id: string;
-  index: string;
-  chapter: string;
-  shellIndex: number;
-  trait: string;
-  subtrait: string;
-  spec: string;
-  accent: [number, number, number]; // Linear RGB
-  accentHex: string;
-  angleOffset: number; // Base azimuthal position
-  yOffset: number; // Vertical offset
-}
-
-export const ROGUE_DEFS: RogueDef[] = [
-  {
-    id: "dev-core",
-    index: "01",
-    chapter: "01 Structure",
-    shellIndex: 0,
-    trait: "DEV AT THE CORE",
-    subtrait: "Developer, Quick Study, Adaptable",
-    spec: "CLEAN REACTIVE ARCH · 120 FPS · CRASH-FREE",
-    accent: [1.0, 0.72, 0.42], // Warm Amber
-    accentHex: "#E8A25F",
-    angleOffset: 0.25,
-    yOffset: 0.15,
-  },
-  {
-    id: "advanced-ai",
-    index: "02",
-    chapter: "02 Intelligence",
-    shellIndex: 1,
-    trait: "ADVANCED AI",
-    subtrait: "Msc CS with Applied Machine Learning",
-    spec: "LLM ORCHESTRATION · ON-DEVICE · HIGH LEVERAGE",
-    accent: [0.55, 0.42, 1.0], // Royal Violet
-    accentHex: "#7B61FF",
-    angleOffset: 1.5,
-    yOffset: -0.12,
-  },
-  {
-    id: "business-data",
-    index: "03",
-    chapter: "03 Pattern",
-    shellIndex: 2,
-    trait: "BUSINESS DATA ANALYTICS",
-    subtrait: "Big Data Analytics, expert in creating business dashboards from scratch",
-    spec: "12M EVENTS/DAY · COHORT RETENTION · ROI CERTAINTY",
-    accent: [0.37, 0.92, 0.83], // Teal Cyan
-    accentHex: "#5EEAD4",
-    angleOffset: 2.75,
-    yOffset: 0.28,
-  },
-  {
-    id: "psychology",
-    index: "04",
-    chapter: "04 Behaviour",
-    shellIndex: 3,
-    trait: "PSYCHOLOGY & COGNITION",
-    subtrait: "Analyzes user behaviour and we know what people need before they know they need it yet",
-    spec: "COGNITIVE FLOW · USER EMPATHY · ZERO FRICTION",
-    accent: [1.0, 0.48, 0.35], // Coral Synapse
-    accentHex: "#FF7A59",
-    angleOffset: 4.0,
-    yOffset: -0.22,
-  },
-  {
-    id: "photography",
-    index: "05",
-    chapter: "05 Craft",
-    shellIndex: 4,
-    trait: "PHOTOGRAPHY & OPTICS",
-    subtrait: "what can i say, I love photography and yeah, this aint AI generated!",
-    spec: "APERTURE ƒ/1.4 · FOCAL DEPTH · HARMONY & POLISH",
-    accent: [1.0, 0.82, 0.5], // Gold Light
-    accentHex: "#FFD080",
-    angleOffset: 5.25,
-    yOffset: 0.08,
-  },
-];
+import { config, ROGUE_DEFS, type RogueDef } from "../config";
+export type { RogueDef };
+export { ROGUE_DEFS };
 
 /**
  * Creates high-DPI vertical textures (512x2048) for laser-etched engraving on brushed metallic blades.
@@ -160,9 +81,13 @@ function createEngravingTextures(def: RogueDef) {
   // Top header metadata
   ctx.font = "600 22px 'Geist Mono', 'SF Mono', Menlo, monospace";
   ctx.fillStyle = "rgba(236, 236, 230, 0.48)";
-  ctx.fillText(`SYS.ROGUE // SHELL_0${def.shellIndex + 1} // TRAIT_${def.index}`, -860, -48);
+  ctx.fillText(
+    `${config.rogueElements.systemHeaderPrefix}${def.shellIndex + 1}${config.rogueElements.systemHeaderTrait}${def.index}`,
+    -860,
+    -48,
+  );
   ctx.textAlign = "right";
-  ctx.fillText("25.2048° N — 55.2708° E", 860, -48);
+  ctx.fillText(config.personal.coords, 860, -48);
   ctx.textAlign = "left";
 
   // Center primary laser-etched trait title
@@ -186,7 +111,7 @@ function createEngravingTextures(def: RogueDef) {
   ctx.fillText(def.spec, -860, 108);
 
   // Accent pill badge on the right
-  const badgeText = `TRAIT: ${def.index}`;
+  const badgeText = `${config.rogueElements.badgePrefix}${def.index}`;
   ctx.font = "700 18px 'Geist Mono', monospace";
   const badgeWidth = ctx.measureText(badgeText).width + 30;
   ctx.fillStyle = `rgba(${Math.round(def.accent[0] * 255)}, ${Math.round(def.accent[1] * 255)}, ${Math.round(

@@ -1,25 +1,14 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import gsap from "gsap";
-import { site } from "../content";
+import { config } from "../config";
 import { runtime, scrollToTarget, setUI, useClock, useUI } from "../lib/runtime";
 import { Mark } from "./Mark";
 import { Magnetic } from "./Magnetic";
 import LiquidGlass from "./LiquidGlass";
 
-const LINKS = [
-  { label: "Craft & Forces", target: "#world", href: "#world" },
-  { label: "Selected Work", target: "#work", href: "#work" },
-  { label: "Impact & Stack", target: "#impact", href: "#impact" },
-  { label: "Contact", target: "end", href: "#contact" },
-];
-
-const SECTIONS = [
-  { id: "#top", label: "Index" },
-  { id: "#world", label: "Craft" },
-  { id: "#work", label: "Work" },
-  { id: "#impact", label: "Impact" },
-  { id: "#contact", label: "Contact" },
-];
+const { personal: site, navigation: navConfig } = config;
+const LINKS = navConfig.links;
+const SECTIONS = navConfig.sections;
 
 function go(target: string) {
   if (target === "end") scrollToTarget(document.documentElement.scrollHeight, 2.8);
@@ -159,10 +148,10 @@ export function Nav() {
         >
           {/* Brand & Monogram */}
           <a
-            href="#top"
+            href={SECTIONS[0]?.id ?? "#top"}
             data-reveal="nav"
             data-cursor="link"
-            aria-label={`${site.name} — return to top`}
+            aria-label={`${site.name} — ${navConfig.brandAriaLabelSuffix}`}
             onClick={(e) => {
               e.preventDefault();
               setOpen(false);
@@ -177,14 +166,14 @@ export function Nav() {
               <span className="font-serif block text-[15px] font-normal tracking-wide text-bone">
                 {site.first} <span className="italic text-bone/80">{site.last}</span>
               </span>
-              <span className="mono block text-[9px] text-mist tracking-wider uppercase">Flutter · AI · Data</span>
+              <span className="mono block text-[9px] text-mist tracking-wider uppercase">{site.disciplinesBadge}</span>
             </div>
           </a>
 
           {/* Center: Desktop Navigation with Liquid Bead */}
           <nav
             ref={navRef}
-            aria-label="Primary"
+            aria-label={navConfig.primaryNavAriaLabel}
             className="relative hidden items-center rounded-full px-1.5 py-1 wide:flex"
             onMouseLeave={() => setHoveredIdx(null)}
           >
@@ -220,7 +209,7 @@ export function Nav() {
                         isCurrent ? "text-bone" : "text-mist hover:text-bone"
                       }`}
                     >
-                      <span className="text-ash mr-1.5 text-[10px]">0{i + 1}</span>
+                      <span className="text-ash mr-1.5 text-[10px]">{item.index}</span>
                       {item.label}
                     </a>
                   </Magnetic>
@@ -240,14 +229,14 @@ export function Nav() {
 
             <Magnetic strength={0.25}>
               <a
-                href="#contact"
+                href={navConfig.cta.href}
                 onClick={(e) => {
                   e.preventDefault();
-                  go("end");
+                  go(navConfig.cta.target);
                 }}
                 className="hidden sm:inline-flex items-center rounded-full bg-bone px-4 py-1.5 font-mono text-[11px] uppercase tracking-wider text-ink transition-all duration-300 hover:scale-105 hover:bg-bone-2"
               >
-                Let&apos;s Talk
+                {navConfig.cta.label}
               </a>
             </Magnetic>
 
@@ -255,12 +244,12 @@ export function Nav() {
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              aria-label={open ? "Close menu" : "Open menu"}
+              aria-label={open ? navConfig.mobileMenu.closeLabel : navConfig.mobileMenu.openLabel}
               aria-expanded={open}
               data-cursor="link"
               className="mono text-bone wide:hidden px-3 py-1.5 rounded-full border border-bone/20 bg-ink/60 text-xs tracking-wider"
             >
-              {open ? "Close" : "Menu"}
+              {open ? navConfig.mobileMenu.closeText : navConfig.mobileMenu.openText}
             </button>
           </div>
         </LiquidGlass>
@@ -273,14 +262,14 @@ export function Nav() {
         }`}
       >
         <span className="mono text-[10px] text-mist">
-          <span className="text-bone">{site.shortName}</span> / {site.role}
+          <span className="text-bone">{site.shortName}</span> {navConfig.hud.separator} {site.role}
         </span>
         <div className="flex items-center gap-3">
           <div className="h-px w-24 bg-bone/15 overflow-hidden">
             <span ref={barRef} className="block h-full w-full origin-left bg-bone transition-transform" />
           </div>
           <span className="mono text-[10px] tabular-nums text-mist">
-            <span ref={pctRef}>000</span>%
+            <span ref={pctRef}>{navConfig.hud.initialPercent}</span>{navConfig.hud.percentSuffix}
           </span>
         </div>
       </div>
@@ -303,7 +292,7 @@ export function Nav() {
               }}
               className="font-serif text-4xl italic tracking-tight text-bone hover:text-bone-2"
             >
-              <span className="mono mr-3 text-xs text-mist not-italic">0{i + 1}</span>
+              <span className="mono mr-3 text-xs text-mist not-italic">{item.index}</span>
               {item.label}
             </a>
           ))}

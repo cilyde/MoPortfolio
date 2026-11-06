@@ -2,9 +2,11 @@ import { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import gsap from "gsap";
-import type { Project } from "../content";
+import { config, type Project } from "../config";
 import { detectCapabilities } from "../lib/runtime";
 import LiquidGlass from "./LiquidGlass";
+
+const modalConfig = config.modal;
 
 interface DotPreviewModalProps {
   project: Project | null;
@@ -410,7 +412,7 @@ export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
                 }}
               />
               <span className="mono text-xs text-mist">{renderedProject.kind}</span>
-              <span className="text-ash">•</span>
+              <span className="text-ash">{modalConfig.separator}</span>
               <span className="mono text-xs text-bone">{renderedProject.year}</span>
             </div>
 
@@ -420,7 +422,7 @@ export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
               onClick={handleClose}
               data-cursor="link"
               className="flex h-8 w-8 items-center justify-center rounded-full border border-bone/20 bg-bone/10 text-mist transition-all hover:bg-bone hover:text-ink hover:scale-105 active:scale-95"
-              aria-label="Close visual preview"
+              aria-label={modalConfig.closeAriaLabel}
             >
               <X className="h-4 w-4" />
             </button>
@@ -436,7 +438,7 @@ export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
               <div className="relative group overflow-hidden">
                 <img
                   src={renderedProject.image}
-                  alt={`${renderedProject.title} interface preview`}
+                  alt={`${renderedProject.title} ${modalConfig.previewAltSuffix}`}
                   className="w-full h-auto object-cover max-h-[220px] sm:max-h-[360px] lg:max-h-[500px] transition-transform duration-700 ease-out group-hover:scale-105"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
@@ -460,7 +462,7 @@ export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
               </div>
 
               <div className="space-y-2 border-t border-bone/10 pt-4">
-                <span className="mono text-[10px] text-ash uppercase tracking-wider">Key Highlights</span>
+                <span className="mono text-[10px] text-ash uppercase tracking-wider">{modalConfig.highlightsTitle}</span>
                 <ul className="space-y-1.5 text-xs text-bone/90">
                   {renderedProject.contributions.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-2">
@@ -472,7 +474,7 @@ export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
               </div>
 
               <div className="mono text-[10px] text-mist flex flex-wrap gap-2 pt-2">
-                <span className="text-ash">Stack:</span>
+                <span className="text-ash">{modalConfig.stackLabel}</span>
                 <span className="text-bone">{renderedProject.stack}</span>
               </div>
             </div>

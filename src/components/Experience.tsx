@@ -1,8 +1,10 @@
 import type { CSSProperties } from "react";
-import { experience } from "../content";
+import { config } from "../config";
 import { useViewState, viewClass } from "../lib/runtime";
 import LiquidGlass from "./LiquidGlass";
 
+const expConfig = config.experience;
+const experience = expConfig.history;
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export function Experience() {
@@ -14,14 +16,14 @@ export function Experience() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 sm:pb-10">
           <div>
             <p className="rv mono text-mist text-[10.5px] sm:text-xs">
-              <span className="text-bone-2 mr-2">(06)</span> Career Path
+              <span className="text-bone-2 mr-2">{expConfig.sectionNumber}</span> {expConfig.sectionTitle}
             </p>
             <h2 id="experience-title" className="display mt-2.5 sm:mt-3 text-[clamp(2.2rem,6vw,5.5rem)]">
-              Work <span className="text-bone/80 italic font-serif">History</span>
+              {expConfig.headingLine1} <span className="text-bone/80 italic font-serif">{expConfig.headingLine2}</span>
             </h2>
           </div>
           <p className="rv mt-2.5 sm:mt-0 max-w-sm text-xs mono text-mist" style={d(80)}>
-            Leadership, architectures shipped, teams elevated.
+            {expConfig.description}
           </p>
         </div>
 
@@ -46,12 +48,12 @@ export function Experience() {
                     </h3>
                     {exp.current && (
                       <span className="mono text-[9px] rounded-full bg-bone/10 border border-bone/30 text-bone px-2.5 py-0.5">
-                        Current
+                        {expConfig.currentBadge}
                       </span>
                     )}
                   </div>
                   <p className="text-sm font-semibold text-bone-2 mt-1">
-                    {exp.company} <span className="text-ash font-normal">• {exp.location}</span>
+                    {exp.company} <span className="text-ash font-normal">{expConfig.separator} {exp.location}</span>
                   </p>
                 </div>
                 <div className="mono text-xs text-mist">{exp.period}</div>
@@ -60,7 +62,7 @@ export function Experience() {
               <p className="text-sm leading-relaxed text-bone/80 mt-4 max-w-3xl">{exp.description}</p>
 
               <div className="mt-5 space-y-2 border-t border-bone/10 pt-4">
-                <span className="mono text-[10px] text-ash uppercase tracking-wider">Key Impact</span>
+                <span className="mono text-[10px] text-ash uppercase tracking-wider">{expConfig.impactTitle}</span>
                 <ul className="space-y-1.5 text-xs text-mist">
                   {exp.achievements.map((ach, aIdx) => (
                     <li key={aIdx} className="flex items-start gap-2.5">

@@ -1,8 +1,10 @@
 import type { CSSProperties } from "react";
-import { stats } from "../content";
+import { config } from "../config";
 import { useViewState, viewClass } from "../lib/runtime";
 import LiquidGlass from "./LiquidGlass";
 
+const impactConfig = config.impact;
+const stats = impactConfig.stats;
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export function Impact() {
@@ -17,14 +19,14 @@ export function Impact() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-bone/15 pb-5 sm:pb-6">
           <div>
             <p className="rv mono text-mist text-[10.5px] sm:text-xs">
-              <span className="text-bone-2 mr-2">(04)</span> Track Record & Business Impact
+              <span className="text-bone-2 mr-2">{impactConfig.sectionNumber}</span> {impactConfig.sectionTitle}
             </p>
             <h2 id="impact-title" className="display mt-3 sm:mt-4 text-[clamp(2.4rem,7vw,6.5rem)]">
-              Proven <span className="text-bone/80 italic font-serif">Numbers</span>
+              {impactConfig.headingLine1} <span className="text-bone/80 italic font-serif">{impactConfig.headingLine2}</span>
             </h2>
           </div>
           <p className="rv mt-3 sm:mt-0 max-w-md text-xs sm:text-sm text-mist leading-relaxed" style={d(100)}>
-            Measurable engineering results shipped to real users.
+            {impactConfig.description}
           </p>
         </div>
 

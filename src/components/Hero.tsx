@@ -1,12 +1,14 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ArrowDown } from "lucide-react";
-import { site } from "../content";
+import { config } from "../config";
 import { scrollToTarget } from "../lib/runtime";
 import { SplitChars, SplitWords } from "./Split";
 import { Magnetic } from "./Magnetic";
 import LiquidGlass from "./LiquidGlass";
 import { GlassButton } from "./GlassButton";
+
+const { personal: site, hero: heroConfig } = config;
 
 function RotatingBadge({ size = "md" }: { size?: "sm" | "md" }) {
   const isSm = size === "sm";
@@ -20,10 +22,10 @@ function RotatingBadge({ size = "md" }: { size?: "sm" | "md" }) {
       <Magnetic strength={0.2}>
         <button
           type="button"
-          onClick={() => scrollToTarget("#world", 2.2)}
+          onClick={() => scrollToTarget(heroConfig.scrollTarget, 2.2)}
           data-cursor="link"
           className={`group relative grid ${btnSize} place-items-center`}
-          aria-label="Scroll to explore craft and projects"
+          aria-label={heroConfig.badge.ariaLabel}
         >
           <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full animate-spin-slow">
             <defs>
@@ -31,7 +33,7 @@ function RotatingBadge({ size = "md" }: { size?: "sm" | "md" }) {
             </defs>
             <text className="fill-mist font-mono text-[7.2px] uppercase tracking-[0.22em]">
               <textPath href="#badgeCircle" startOffset="0">
-                Flutter • Applied AI • Data • Craft •&#160;
+                {heroConfig.badge.text}
               </textPath>
             </text>
           </svg>
@@ -74,7 +76,7 @@ export function Hero() {
       id="top"
       ref={ref}
       data-kf="hero"
-      aria-label="Introduction"
+      aria-label={heroConfig.ariaLabel}
       className="relative h-[100svh] min-h-[580px] overflow-hidden"
     >
       {/* 3D Sculpture cursor focus trap */}
@@ -83,12 +85,6 @@ export function Hero() {
       {/* Hero content cluster: Grounded in lower portion on mobile, absolute left on desktop */}
       <div className="absolute inset-x-[var(--gutter)] bottom-5 z-10 wide:bottom-[max(180px,22svh)] wide:left-[var(--gutter)] wide:right-auto wide:max-w-[min(54vw,880px)]">
         <div data-hero-fade className="relative">
-          {/* Silky soft atmospheric contrast vignette behind mobile text — fades out cleanly on scroll! */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -inset-x-5 -inset-y-6 -z-10 rounded-3xl bg-radial-[ellipse_120%_90%_at_50%_90%] from-[#070709]/92 via-[#070709]/65 to-transparent wide:hidden"
-          />
-
           {/* Eyebrow in delicate LiquidGlass capsule */}
           <div data-reveal="eyebrow" className="mb-3 sm:mb-4 inline-block wide:mb-7">
             <LiquidGlass
@@ -99,7 +95,7 @@ export function Hero() {
             >
               <span className="pulse-dot" aria-hidden="true" />
               <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-bone">{site.role}</span>
-              <span className="text-ash" aria-hidden="true">—</span>
+              <span className="text-ash" aria-hidden="true">{heroConfig.eyebrowSeparator}</span>
               <span className="font-mono text-[11px] sm:text-xs text-mist">
                 {site.city}, {site.country}
               </span>
@@ -110,9 +106,6 @@ export function Hero() {
           <h1
             data-reveal="name"
             className="display text-[clamp(2.8rem,11.5vw,4.8rem)] leading-[0.92] tracking-[-0.025em] wide:text-[clamp(5.5rem,10.5vw,12.5rem)] wide:leading-[0.88] text-bone"
-            style={{
-              textShadow: "0 2px 24px rgba(7, 7, 9, 0.95), 0 0 45px rgba(7, 7, 9, 0.8)",
-            }}
           >
             <SplitChars text={site.first} className="block" />
             <span className="block pl-[0.35em] sm:pl-[0.55em] italic text-bone/90 font-serif">
@@ -124,20 +117,17 @@ export function Hero() {
           <p
             data-reveal="intro"
             className="mt-3 max-w-[32rem] text-[13.5px] sm:text-[15px] leading-[1.55] sm:leading-[1.65] text-mist/95 wide:mt-8 wide:text-[17px]"
-            style={{
-              textShadow: "0 1px 16px rgba(7, 7, 9, 0.95)",
-            }}
           >
             <SplitWords text={site.intro} />
           </p>
 
           {/* Hero CTAs */}
           <div data-reveal="cta" className="mt-5 flex flex-wrap items-center gap-2.5 sm:gap-4 wide:mt-8">
-            <GlassButton href="#world" size="md">
-              Explore Craft & Forces
+            <GlassButton href={heroConfig.ctas.primary.href} size="md">
+              {heroConfig.ctas.primary.label}
             </GlassButton>
-            <GlassButton href="#work" size="md" tone="dark">
-              Selected Work
+            <GlassButton href={heroConfig.ctas.secondary.href} size="md" tone="dark">
+              {heroConfig.ctas.secondary.label}
             </GlassButton>
           </div>
 
@@ -147,10 +137,10 @@ export function Hero() {
               <RotatingBadge size="sm" />
               <button
                 type="button"
-                onClick={() => scrollToTarget("#world", 2.2)}
+                onClick={() => scrollToTarget(heroConfig.scrollTarget, 2.2)}
                 className="mono text-[9.5px] text-mist/90 transition-colors hover:text-bone"
               >
-                Keep scrolling to explore ↓
+                {heroConfig.scrollPromptMobile}
               </button>
             </div>
 
@@ -174,11 +164,11 @@ export function Hero() {
               type="button"
               data-reveal="cue"
               data-cursor="link"
-              onClick={() => scrollToTarget("#world", 2.2)}
+              onClick={() => scrollToTarget(heroConfig.scrollTarget, 2.2)}
               className="mono flex items-center gap-3 text-mist transition-colors hover:text-bone"
             >
               <span className="h-px w-6 bg-bone/40 -translate-y-px" aria-hidden="true" />
-              Keep scrolling to explore
+              {heroConfig.scrollPrompt}
             </button>
           </Magnetic>
         </div>

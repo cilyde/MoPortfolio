@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { site } from "../content";
+import { config } from "../config";
 import { scrollToTarget, useClock } from "../lib/runtime";
 import { SplitChars } from "./Split";
 import { Magnetic } from "./Magnetic";
 import LiquidGlass from "./LiquidGlass";
 
+const { personal: site, closing: closingConfig } = config;
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 /**
@@ -44,7 +45,7 @@ export function Closing() {
     }
   };
 
-  const copyLabel = copied ? "Copied ✓" : "Copy address";
+  const copyLabel = copied ? closingConfig.copyAddress.copiedLabel : closingConfig.copyAddress.defaultLabel;
 
   return (
     <section id="contact" ref={ref} aria-labelledby="contact-title" className="relative h-[260svh]">
@@ -57,12 +58,12 @@ export function Closing() {
         <div className={`rvl rvl-hide absolute inset-0 ${stage === 1 ? "is-in" : stage > 1 ? "is-out" : ""}`}>
           <div className="absolute bottom-[13svh] left-[var(--gutter)] right-[var(--gutter)] text-center wide:bottom-auto wide:left-[calc(50%+36px)] wide:right-auto wide:top-1/2 wide:-translate-y-1/2 wide:text-left">
             <p className="rv mono text-mist">
-              <span className="text-bone-2 mr-2">(07)</span> Full Circle
+              <span className="text-bone-2 mr-2">{closingConfig.stage1.sectionNumber}</span> {closingConfig.stage1.sectionTitle}
             </p>
             <p className="mt-4 font-serif text-[clamp(1.8rem,3.2vw,3rem)] italic leading-[1.14] text-bone">
-              <SplitChars text="Every system begins" className="block" />
+              <SplitChars text={closingConfig.stage1.line1} className="block" />
               <span className="text-bone/80">
-                <SplitChars text="with a single line." className="block" offset={19} />
+                <SplitChars text={closingConfig.stage1.line2} className="block" offset={19} />
               </span>
             </p>
           </div>
@@ -72,12 +73,12 @@ export function Closing() {
         <div className={`rvl rvl-hide absolute inset-0 ${stage === 2 ? "is-in" : ""}`}>
           <div className="absolute inset-x-[var(--gutter)] bottom-[calc(50%+4svh)] text-center">
             <p className="rv mono text-mist">
-              <span className="text-bone-2 mr-2">(07)</span> Direct Contact
+              <span className="text-bone-2 mr-2">{closingConfig.stage2.sectionNumber}</span> {closingConfig.stage2.sectionTitle}
             </p>
             <h2 id="contact-title" className="display mt-3 sm:mt-5 text-[clamp(2.7rem,9vw,10.5rem)]">
-              <SplitChars text="Let's build" className="block" />
+              <SplitChars text={closingConfig.stage2.headingLine1} className="block" />
               <span className="block text-bone/80 italic font-serif">
-                <SplitChars text="the next one." offset={11} />
+                <SplitChars text={closingConfig.stage2.headingLine2} offset={11} />
               </span>
             </h2>
           </div>
@@ -121,7 +122,7 @@ export function Closing() {
 
             {/* Social pills */}
             <ul className="rv mono mt-5 sm:mt-8 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 gap-y-2.5 sm:gap-y-3" style={d(280)}>
-              {site.socials.map((s) => (
+              {closingConfig.socials.map((s) => (
                 <li key={s.label}>
                   <Magnetic strength={0.25}>
                     <LiquidGlass
@@ -137,7 +138,7 @@ export function Closing() {
                       contentClassName="px-3.5 sm:px-4 py-1.5 flex items-center gap-1.5 text-xs text-mist transition-colors group-hover:text-bone"
                     >
                       <span>{s.label}</span>
-                      <span aria-hidden="true">↗</span>
+                      <span aria-hidden="true">{s.externalIcon ?? "↗"}</span>
                     </LiquidGlass>
                   </Magnetic>
                 </li>
@@ -151,9 +152,9 @@ export function Closing() {
             style={d(360)}
           >
             <span>
-              © {new Date().getFullYear()} {site.name}. All rights reserved.
+              © {new Date().getFullYear()} {site.name}. {closingConfig.footer.copyrightSuffix}
             </span>
-            <span className="hidden wide:inline">Engineered with Flutter, AI & WebGL craft</span>
+            <span className="hidden wide:inline">{closingConfig.footer.craftedWith}</span>
             <span>
               {site.city} <span className="tabular-nums text-mist">{time}</span> {site.tzLabel}
             </span>
@@ -164,8 +165,8 @@ export function Closing() {
               className="text-mist transition-colors hover:text-bone"
             >
               <span className="roll">
-                <span>Back to the first line ↑</span>
-                <span aria-hidden="true">Back to the first line ↑</span>
+                <span>{closingConfig.footer.backToTop}</span>
+                <span aria-hidden="true">{closingConfig.footer.backToTop}</span>
               </span>
             </button>
           </footer>

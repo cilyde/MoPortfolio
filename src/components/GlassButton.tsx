@@ -30,15 +30,29 @@ export function GlassButton({
     onClick?.(e);
   };
 
-  const dims =
+  // Harmonious, concentric proportions:
+  // Button height on outer LiquidGlass container -> icon badge diameter -> equal top/bottom/right margin -> proportional left padding
+  const config =
     size === "lg"
-      ? "h-[60px] pl-7 pr-2.5 gap-5 text-[15px]"
+      ? {
+          height: "h-14",
+          content: "pl-7 pr-3 gap-4 text-xs",
+          iconDims: "h-8 w-8",
+          iconSvgDims: "h-4 w-4",
+        }
       : size === "sm"
-      ? "h-10 pl-4 pr-1.5 gap-3 text-[12.5px]"
-      : "h-12 pl-5 pr-2 gap-4 text-[13.5px]";
-
-  const iconDims =
-    size === "lg" ? "h-10 w-10" : size === "sm" ? "h-7 w-7" : "h-8 w-8";
+      ? {
+          height: "h-10",
+          content: "pl-5 pr-2 gap-3 text-[11px]",
+          iconDims: "h-6 w-6",
+          iconSvgDims: "h-3 w-3",
+        }
+      : {
+          height: "h-12",
+          content: "pl-6 pr-2.5 gap-3.5 text-xs",
+          iconDims: "h-7 w-7",
+          iconSvgDims: "h-3.5 w-3.5",
+        };
 
   const isLink = Boolean(href);
   const AsTag = isLink ? "a" : "button";
@@ -51,21 +65,29 @@ export function GlassButton({
       rel={external ? "noopener noreferrer" : undefined}
       onClick={handleClick as never}
       tone={tone}
-      className={`group inline-flex select-none transition-transform duration-300 hover:scale-[1.03] active:scale-[0.97] ${className}`}
-      contentClassName={`flex h-full items-center ${dims}`}
+      className={`group inline-flex items-center select-none ${config.height} transition-transform duration-300 hover:scale-[1.03] active:scale-[0.97] ${className}`}
+      contentClassName={`flex h-full items-center ${config.content}`}
     >
-      <span className="font-mono text-xs uppercase tracking-wider text-bone transition-colors group-hover:text-bone-2">
+      <span
+        className={`font-mono uppercase tracking-wider transition-colors whitespace-nowrap leading-none ${
+          tone === "dark"
+            ? "text-bone group-hover:text-bone-2"
+            : "text-ink group-hover:text-ink-2"
+        }`}
+      >
         {children}
       </span>
       <span
-        className={`grid place-items-center rounded-full ${iconDims} ${
+        className={`grid place-items-center rounded-full shrink-0 aspect-square ${config.iconDims} ${
           tone === "dark"
-            ? "bg-bone text-ink shadow-[inset_0_-2px_6px_rgba(0,0,0,0.2),0_4px_12px_rgba(0,0,0,0.4)]"
-            : "bg-ink text-bone shadow-[inset_0_-2px_6px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.2)]"
+            ? "bg-bone text-ink shadow-[inset_0_1px_1px_rgba(255,255,255,0.6),0_1px_3px_rgba(0,0,0,0.3)]"
+            : "bg-ink text-bone shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_1px_3px_rgba(0,0,0,0.2)]"
         } transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105`}
       >
         {icon ?? (
-          <ArrowUpRight className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          <ArrowUpRight
+            className={`${config.iconSvgDims} transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
+          />
         )}
       </span>
     </LiquidGlass>

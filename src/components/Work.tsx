@@ -1,12 +1,14 @@
 import { useState, type CSSProperties } from "react";
 import { Sparkles, Eye, ArrowUpRight } from "lucide-react";
-import { projects, type Project } from "../content";
+import { config, type Project } from "../config";
 import { useViewState, viewClass } from "../lib/runtime";
 import { SplitChars } from "./Split";
 import { DotPreviewModal } from "./DotPreviewModal";
 import { Magnetic } from "./Magnetic";
 import LiquidGlass from "./LiquidGlass";
 
+const workConfig = config.work;
+const projects = workConfig.projects;
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export function Work() {
@@ -31,19 +33,19 @@ function WorkIntro() {
       <div className="w-full">
         <div className="rv mono flex items-center justify-between text-mist">
           <span>
-            <span className="text-bone-2 mr-2">(03)</span> Selected Work & Case Studies
+            <span className="text-bone-2 mr-2">{workConfig.sectionNumber}</span> {workConfig.sectionTitle}
           </span>
-          <span>2023 — 2025</span>
+          <span>{workConfig.period}</span>
         </div>
         <div className="rule mt-5 h-px w-full bg-bone/15" aria-hidden="true" />
         <h2 id="work-title" className="display mt-10 text-[clamp(4.2rem,16vw,17rem)] leading-[0.8] tracking-[-0.035em]">
-          <SplitChars text="Selected" className="block" />
+          <SplitChars text={workConfig.headingLine1} className="block" />
           <span className="block pl-[0.8em]">
             <span className="text-bone/80 italic font-serif">
-              <SplitChars text="work" offset={8} />
+              <SplitChars text={workConfig.headingLine2} offset={8} />
             </span>
             <sup className="rv mono ml-4 align-top text-[12px] tracking-[0.14em] text-mist" style={d(300)}>
-              (05)
+              {workConfig.countBadge}
             </sup>
           </span>
         </h2>
@@ -51,7 +53,7 @@ function WorkIntro() {
           className="rv mt-10 max-w-[32rem] text-[15px] leading-[1.65] text-mist wide:ml-auto wide:mr-[6vw] wide:text-[17px]"
           style={d(200)}
         >
-          Selected mobile apps and production systems.
+          {workConfig.description}
         </p>
       </div>
     </div>
@@ -110,7 +112,7 @@ function ProjectBlock({
             <div className="rv mono flex flex-wrap items-center gap-x-3 sm:gap-x-4 gap-y-1 text-mist text-[10.5px] sm:text-xs">
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.accent, boxShadow: `0 0 8px ${p.accent}` }} />
               <span style={{ color: "var(--accent)" }}>{p.index}</span>
-              <span className="-ml-1 text-ash">/ 05</span>
+              <span className="-ml-1 text-ash">/ {workConfig.totalCount}</span>
               <span className="h-px w-6 sm:w-8 bg-bone/20" aria-hidden="true" />
               <span className="text-bone">{p.kind}</span>
               <span>{p.year}</span>
@@ -149,11 +151,11 @@ function ProjectBlock({
                     />
                     <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: p.accent }} />
                   </span>
-                  <span>Preview Interface</span>
+                  <span>{workConfig.previewButton}</span>
                   <Eye className="h-3.5 w-3.5 text-mist transition-transform group-hover:scale-110 group-hover:text-bone" />
                 </LiquidGlass>
               </Magnetic>
-              <span className="mono text-[10px] text-ash hidden sm:inline">Tap to preview UI</span>
+              <span className="mono text-[10px] text-ash hidden sm:inline">{workConfig.previewPrompt}</span>
             </div>
 
             {/* Key Deliverables bullet list */}
@@ -170,9 +172,9 @@ function ProjectBlock({
 
             {/* Recruiter metadata grid */}
             <dl className="rv mt-3 sm:mt-6 grid grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-2 sm:gap-y-3 border-t border-bone/10 pt-2.5 sm:pt-4 sm:grid-cols-3" style={d(240)}>
-              <Meta label="Role" value={p.role} />
-              <Meta label="Platform" value={p.platform} />
-              <Meta label="Tech Stack" value={p.stack} className="col-span-2 sm:col-span-1" />
+              <Meta label={workConfig.metaLabels.role} value={p.role} />
+              <Meta label={workConfig.metaLabels.platform} value={p.platform} />
+              <Meta label={workConfig.metaLabels.techStack} value={p.stack} className="col-span-2 sm:col-span-1" />
             </dl>
           </div>
         </div>
