@@ -5,6 +5,7 @@ const CAMERA_KEYS = new Set<ParamKey>(["camRadius", "camPolar", "camAzimuth", "c
 interface Anchor {
   y: number;
   params: Params;
+  kf?: string;
 }
 
 /**
@@ -23,10 +24,24 @@ export class Director {
     const sy = window.scrollY;
     this.anchors = els
       .map((el) => ({
+        kf: el.dataset.kf ?? "hero",
         y: el.getBoundingClientRect().top + sy,
         params: resolveKeyframe(el.dataset.kf ?? "hero", el.dataset.kfFallback),
       }))
       .sort((a, b) => a.y - b.y);
+
+    // Precisely time withering to begin when 90% of global scroll is met
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const y90 = maxScroll * 0.90;
+    const closingIdx = this.anchors.findIndex((a) => a.kf === "closing-line");
+    if (closingIdx > 0) {
+      const closingY = this.anchors[closingIdx].y;
+      const hold = 0.16;
+      // Position the preceding anchor so that after the 0.16 hold plateau,
+      // the withering transition begins exactly when 90% scroll is met.
+      const startY = (y90 - hold * closingY) / (1 - hold);
+      this.anchors[closingIdx - 1].y = startY;
+    }
   }
 
   private computeTarget(scrollY: number) {
