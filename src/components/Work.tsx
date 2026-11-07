@@ -1,7 +1,8 @@
-import { useState, type CSSProperties } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { Sparkles, Eye, ArrowUpRight } from "lucide-react";
 import { config, type Project } from "../config";
 import { useViewState, viewClass } from "../lib/runtime";
+import { preloadAllImages, preloadImage } from "../lib/preloadImages";
 import { SplitChars } from "./Split";
 import { DotPreviewModal } from "./DotPreviewModal";
 import { Magnetic } from "./Magnetic";
@@ -13,6 +14,11 @@ const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export function Work() {
   const [activePreview, setActivePreview] = useState<Project | null>(null);
+
+  // Eagerly preload and decode preview images during idle time so opening is instantaneous
+  useEffect(() => {
+    preloadAllImages(projects.map((p) => p.image));
+  }, []);
 
   return (
     <section id="work" aria-labelledby="work-title" className="relative">
@@ -81,6 +87,13 @@ function ProjectBlock({
   const [ref, view] = useViewState<HTMLElement>("-45% 0px -45% 0px");
   const textLeft = index % 2 === 0;
 
+  // Preload and decode project image as user approaches this project
+  useEffect(() => {
+    if (view !== "none") {
+      preloadImage(p.image);
+    }
+  }, [view, p.image]);
+
   return (
     <article ref={ref} aria-labelledby={`${p.id}-title`} className="relative h-[155svh]">
       <div
@@ -142,6 +155,9 @@ function ProjectBlock({
                   as="button"
                   type="button"
                   onClick={onOpenPreview}
+                  onMouseEnter={() => preloadImage(p.image)}
+                  onTouchStart={() => preloadImage(p.image)}
+                  onFocus={() => preloadImage(p.image)}
                   data-cursor="preview"
                   radius={24}
                   tone="dark"

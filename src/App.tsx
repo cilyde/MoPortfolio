@@ -5,6 +5,7 @@ import { detectCapabilities, runtime, setUI } from "./lib/runtime";
 import { config } from "./config";
 import { createSmoothScroll } from "./lib/lenis";
 import { prepareIntroScene, prepareUI, runIntro } from "./lib/motion";
+import { preloadAllImages } from "./lib/preloadImages";
 import { Experience } from "./webgl/Experience";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
@@ -61,6 +62,10 @@ export default function App() {
     window.scrollTo(0, 0);
     const smooth = createSmoothScroll(caps.reducedMotion);
     runtime.lenis = smooth.lenis;
+
+    // Preload work images in idle time during intro/hero exploration
+    preloadAllImages(config.work.projects.map((p) => p.image));
+
     return () => {
       smooth.dispose();
       runtime.lenis = null;

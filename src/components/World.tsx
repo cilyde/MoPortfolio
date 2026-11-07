@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { config } from "../config";
-import { runtime } from "../lib/runtime";
+import { runtime, scrollToChapter } from "../lib/runtime";
 import { SplitChars } from "./Split";
 import { setText, useLiveStats } from "./live";
 import LiquidGlass from "./LiquidGlass";
@@ -73,6 +73,7 @@ export function World() {
       {STOPS.map((s, idx) => (
         <div
           key={`${s.kf}-${idx}`}
+          id={s.kf}
           data-kf={s.kf}
           aria-hidden="true"
           className="pointer-events-none absolute left-0 h-px w-px"
@@ -189,6 +190,7 @@ function Disciplines({ chapter }: { chapter: number }) {
           return (
             <li
               key={item.name}
+              onClick={() => scrollToChapter(item.chapter)}
               onMouseEnter={() => {
                 runtime.manualHoverPillar = item.chapter - 1;
               }}

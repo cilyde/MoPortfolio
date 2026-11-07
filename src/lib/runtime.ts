@@ -92,10 +92,14 @@ export function useUI<K extends keyof UIState>(key: K): UIState[K] {
 /* ── Smooth Navigation helpers ─────────────────────────────────────── */
 const easeInOutQuart = (t: number) => (t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2);
 
-export function scrollToTarget(target: string | number, duration = 2.4) {
+export function scrollToTarget(target: string | number, duration = 2.0, onComplete?: () => void) {
   const lenis = runtime.lenis;
   if (lenis) {
-    lenis.scrollTo(target, { duration, easing: easeInOutQuart });
+    if (lenis.isStopped) {
+      lenis.start();
+    }
+    document.documentElement.classList.remove("lenis-stopped", "is-locked");
+    lenis.scrollTo(target, { duration, easing: easeInOutQuart, onComplete });
     return;
   }
   let top = 0;
@@ -105,6 +109,41 @@ export function scrollToTarget(target: string | number, duration = 2.4) {
     top = el ? el.getBoundingClientRect().top + window.scrollY : 0;
   }
   window.scrollTo({ top, behavior: runtime.caps?.reducedMotion ? "auto" : "smooth" });
+  if (onComplete) {
+    setTimeout(onComplete, (duration || 1) * 1000);
+  }
+}
+
+/**
+ * Jump smoothly to any specific chapter within the World / Personality section.
+ */
+export function scrollToChapter(chapter: number, duration?: number) {
+  const worldEl = document.getElementById("world");
+  if (!worldEl) return;
+
+  const currentScroll = runtime.lenis ? runtime.lenis.scroll : window.scrollY;
+  const worldTop = worldEl.getBoundingClientRect().top + currentScroll;
+
+  // Chapter stop percentages (in vh from top of #world) matching STOPS in World.tsx
+  const stops: Record<number, number> = {
+    0: 0,   // Intro
+    1: 90,  // Structure
+    2: 180, // Intelligence
+    3: 270, // Pattern
+    4: 415, // Behaviour
+    5: 505, // Craft / Light
+    6: 655, // Synthesis
+  };
+
+  const vh = window.innerHeight;
+  const at = stops[chapter] ?? 0;
+  // Offset slightly into the chapter zone to reliably trigger ScrollTrigger keyframe
+  const targetY = Math.round(worldTop + (at * vh) / 100 + 10);
+
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const dur = duration ?? (isMobile ? 1.4 : 2.0);
+
+  scrollToTarget(targetY, dur);
 }
 
 /* ── Viewport observation hooks ───────────────────────────────────── */

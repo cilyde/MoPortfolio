@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import gsap from "gsap";
 import { config } from "../config";
-import { runtime, scrollToTarget, setUI, useClock, useUI } from "../lib/runtime";
+import { runtime, scrollToChapter, scrollToTarget, setUI, useClock, useUI } from "../lib/runtime";
 import { Mark } from "./Mark";
 import { Magnetic } from "./Magnetic";
 import LiquidGlass from "./LiquidGlass";
@@ -10,9 +10,19 @@ const { personal: site, navigation: navConfig } = config;
 const LINKS = navConfig.links;
 const SECTIONS = navConfig.sections;
 
+const CHAPTERS = [
+  { index: "01", title: "Structure", chapter: 1 },
+  { index: "02", title: "Intelligence", chapter: 2 },
+  { index: "03", title: "Pattern", chapter: 3 },
+  { index: "04", title: "Behaviour", chapter: 4 },
+  { index: "05", title: "Craft", chapter: 5 },
+];
+
 function go(target: string) {
-  if (target === "end") scrollToTarget(document.documentElement.scrollHeight, 2.8);
-  else scrollToTarget(target, 2.4);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const dur = isMobile ? 1.4 : 2.0;
+  if (target === "end") scrollToTarget(document.documentElement.scrollHeight, dur);
+  else scrollToTarget(target, dur);
 }
 
 export function Nav() {
@@ -128,9 +138,22 @@ export function Nav() {
     window.addEventListener("keydown", onKey);
     return () => {
       runtime.lenis?.start();
+      document.documentElement.classList.remove("lenis-stopped", "is-locked");
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
+
+  // Safely restore scrolling before performing smooth navigation from mobile menu
+  const closeMenuAndScroll = (action: () => void) => {
+    if (runtime.lenis) {
+      runtime.lenis.start();
+    }
+    document.documentElement.classList.remove("lenis-stopped", "is-locked");
+    setOpen(false);
+    requestAnimationFrame(() => {
+      action();
+    });
+  };
 
   return (
     <>
@@ -154,8 +177,7 @@ export function Nav() {
             aria-label={`${site.name} — ${navConfig.brandAriaLabelSuffix}`}
             onClick={(e) => {
               e.preventDefault();
-              setOpen(false);
-              scrollToTarget(0, 2.4);
+              closeMenuAndScroll(() => scrollToTarget(0, 1.8));
             }}
             onMouseEnter={() => setMarkHover(true)}
             onMouseLeave={() => setMarkHover(false)}
@@ -232,7 +254,7 @@ export function Nav() {
                 href={navConfig.cta.href}
                 onClick={(e) => {
                   e.preventDefault();
-                  go(navConfig.cta.target);
+                  closeMenuAndScroll(() => go(navConfig.cta.target));
                 }}
                 className="hidden sm:inline-flex items-center rounded-full bg-bone px-4 py-1.5 font-mono text-[11px] uppercase tracking-wider text-ink transition-all duration-300 hover:scale-105 hover:bg-bone-2"
               >
@@ -276,28 +298,49 @@ export function Nav() {
 
       {/* Mobile Menu Panel */}
       <div
-        className={`fixed inset-0 z-40 flex flex-col justify-between bg-ink/95 px-6 pb-[max(24px,env(safe-area-inset-bottom))] pt-[max(92px,calc(env(safe-area-inset-top)+76px))] backdrop-blur-2xl transition-all duration-500 wide:hidden ${
+        className={`fixed inset-0 z-40 flex flex-col justify-between overflow-y-auto bg-ink/95 px-6 pb-[max(24px,env(safe-area-inset-bottom))] pt-[max(92px,calc(env(safe-area-inset-top)+76px))] backdrop-blur-2xl transition-all duration-500 wide:hidden ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
-        <nav className="flex flex-col gap-6">
-          {LINKS.map((item, i) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={(e) => {
-                e.preventDefault();
-                setOpen(false);
-                go(item.target);
-              }}
-              className="font-serif text-4xl italic tracking-tight text-bone hover:text-bone-2"
-            >
-              <span className="mono mr-3 text-xs text-mist not-italic">{item.index}</span>
-              {item.label}
-            </a>
+        <nav className="flex flex-col gap-6 my-auto py-4">
+          {LINKS.map((item) => (
+            <div key={item.label} className="flex flex-col">
+              <a
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  closeMenuAndScroll(() => go(item.target));
+                }}
+                className="font-serif text-3xl sm:text-4xl italic tracking-tight text-bone hover:text-bone-2 active:scale-[0.98] transition-transform origin-left"
+              >
+                <span className="mono mr-3 text-xs text-mist not-italic">{item.index}</span>
+                {item.label}
+              </a>
+
+              {/* Sub-chapters for Personality (World section) */}
+              {item.target === "#world" && (
+                <div className="mt-3 pl-7 flex flex-wrap gap-2">
+                  {CHAPTERS.map((ch) => (
+                    <button
+                      key={ch.index}
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenuAndScroll(() => scrollToChapter(ch.chapter));
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-bone/20 bg-bone/5 hover:bg-bone/15 active:bg-bone/25 text-xs font-mono text-bone tracking-wide transition-colors"
+                    >
+                      <span className="text-ash text-[10px]">{ch.index}</span>
+                      <span>{ch.title}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </nav>
-        <div className="border-t border-bone/15 pt-6 flex flex-col gap-2">
+        <div className="border-t border-bone/15 pt-6 flex flex-col gap-2 shrink-0">
           <span className="mono text-xs text-mist">{site.availability}</span>
           <span className="mono text-xs text-bone">{site.email}</span>
         </div>

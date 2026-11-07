@@ -183,7 +183,7 @@ export function runIntro(exp: Experience | null, opts: IntroOptions): () => void
   }
   revealUI(tl, exp ? 3.95 : 1.9);
 
-  if (opts.quick) tl.timeScale(1.7);
+  if (opts.quick) tl.timeScale(1.25);
 
   const speedUp = () => {
     if (finished) return;

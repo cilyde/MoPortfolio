@@ -15,6 +15,12 @@ interface DotPreviewModalProps {
 
 export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
   const [renderedProject, setRenderedProject] = useState<Project | null>(project);
+  const [isImageLoaded, setIsImageLoaded] = useState(() => {
+    if (typeof window === "undefined" || !project) return false;
+    const testImg = new Image();
+    testImg.src = project.image;
+    return Boolean(testImg.complete && testImg.naturalWidth > 0);
+  });
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const auraRef = useRef<HTMLDivElement>(null);
@@ -36,6 +42,22 @@ export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
       handleClose();
     }
   }, [project]);
+
+  // Track image load state seamlessly to prevent visual stutters
+  useEffect(() => {
+    if (!renderedProject) {
+      setIsImageLoaded(false);
+      return;
+    }
+    const testImg = new Image();
+    testImg.src = renderedProject.image;
+    if (testImg.complete && testImg.naturalWidth > 0) {
+      setIsImageLoaded(true);
+    } else {
+      setIsImageLoaded(false);
+      testImg.onload = () => setIsImageLoaded(true);
+    }
+  }, [renderedProject]);
 
   // Clean exit transition
   const handleClose = useCallback(() => {
@@ -433,13 +455,34 @@ export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
             {/* Screenshot presentation */}
             <div
               ref={imageFrameRef}
-              className="lg:col-span-7 overflow-hidden rounded-xl border border-bone/15 bg-ink shadow-2xl"
+              className="lg:col-span-7 overflow-hidden rounded-xl border border-bone/15 bg-ink shadow-2xl relative"
             >
-              <div className="relative group overflow-hidden">
+              <div className="relative group overflow-hidden w-full h-[220px] sm:h-[340px] lg:h-[480px] bg-ink/95 flex items-center justify-center">
+                {/* Ambient shimmer skeleton placeholder while loading */}
+                <div
+                  aria-hidden="true"
+                  className={`absolute inset-0 transition-opacity duration-300 ${
+                    isImageLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
+                  }`}
+                >
+                  <div
+                    className="absolute inset-0 opacity-20"
+                    style={{
+                      background: `radial-gradient(circle at center, ${renderedProject.accent} 0%, transparent 70%)`,
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-bone/10 to-transparent -translate-x-full animate-preview-shimmer" />
+                </div>
+
                 <img
                   src={renderedProject.image}
                   alt={`${renderedProject.title} ${modalConfig.previewAltSuffix}`}
-                  className="w-full h-auto object-cover max-h-[220px] sm:max-h-[360px] lg:max-h-[500px] transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="eager"
+                  decoding="async"
+                  onLoad={() => setIsImageLoaded(true)}
+                  className={`w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 ${
+                    isImageLoaded ? "opacity-100" : "opacity-0"
+                  }`}
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
               </div>
