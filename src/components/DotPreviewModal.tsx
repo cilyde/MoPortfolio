@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { X } from "lucide-react";
+import { X, ArrowUpRight } from "lucide-react";
 import gsap from "gsap";
 import { config, type Project } from "../config";
 import { detectCapabilities } from "../lib/runtime";
@@ -477,6 +477,30 @@ export function DotPreviewModal({ project, onClose }: DotPreviewModalProps) {
                 <span className="text-ash">{modalConfig.stackLabel}</span>
                 <span className="text-bone">{renderedProject.stack}</span>
               </div>
+
+              {renderedProject.links && renderedProject.links.length > 0 && (
+                <div className="flex flex-wrap gap-2.5 pt-3 border-t border-bone/10">
+                  {renderedProject.links.map((link, idx) => (
+                    <a
+                      key={idx}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-cursor="link"
+                      className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-bone/20 bg-bone/5 hover:bg-bone/15 text-bone hover:text-white transition-all text-xs font-mono"
+                      style={{
+                        borderColor: `${renderedProject.accent}40`,
+                      }}
+                    >
+                      <span>{link.url.replace(/^https?:\/\//, "")}</span>
+                      <ArrowUpRight
+                        className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        style={{ color: renderedProject.accent }}
+                      />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </LiquidGlass>

@@ -22,7 +22,10 @@ export class Director {
     const els = Array.from(document.querySelectorAll<HTMLElement>("[data-kf]"));
     const sy = window.scrollY;
     this.anchors = els
-      .map((el) => ({ y: el.getBoundingClientRect().top + sy, params: resolveKeyframe(el.dataset.kf ?? "hero") }))
+      .map((el) => ({
+        y: el.getBoundingClientRect().top + sy,
+        params: resolveKeyframe(el.dataset.kf ?? "hero", el.dataset.kfFallback),
+      }))
       .sort((a, b) => a.y - b.y);
   }
 

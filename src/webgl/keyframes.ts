@@ -296,7 +296,28 @@ export const KEYFRAMES: Record<string, Partial<Params>> = {
     glowIntensity: 0.04,
   },
 
-  // 01 Pulse (Flutter / FinTech / AI — Lime Accent)
+  // 01 Taza (FinTech / Zakat & Interest Tracking — Warm Amber Accent)
+  taza: {
+    camRadius: 12.5,
+    camPolar: 74,
+    camAzimuth: -30,
+    shiftX: 0.32,
+    data: 1,
+    sort: 1,
+    twist: 0.5,
+    flip: 0.15,
+    signals: 1.4,
+    tintR: 1.0,
+    tintG: 0.95,
+    tintB: 0.88,
+    roughness: 0.22,
+    glowR: 0.91,
+    glowG: 0.64,
+    glowB: 0.37,
+    glowIntensity: 0.09,
+  },
+
+  // 01 Pulse (Legacy alias)
   pulse: {
     camRadius: 12.5,
     camPolar: 74,
@@ -317,7 +338,93 @@ export const KEYFRAMES: Record<string, Partial<Params>> = {
     glowIntensity: 0.09,
   },
 
-  // 02 Lumen (Voice-first AI / Memory — Violet Accent)
+  // 02 NeuralDine / Restaurant POS (Applied AI / Retail Tech — Orange-Red Accent)
+  "neural-dine": {
+    camRadius: 12.8,
+    camPolar: 95,
+    camAzimuth: 24,
+    shiftX: -0.32,
+    breath: 1,
+    twist: 0.85,
+    flow: 0.35,
+    flip: 0.65,
+    signals: 1.6,
+    signalSpeed: 1.8,
+    spin: 1.6,
+    tintR: 1.0,
+    tintG: 0.88,
+    tintB: 0.82,
+    roughness: 0.22,
+    glowR: 1.0,
+    glowG: 0.27,
+    glowB: 0.0,
+    glowIntensity: 0.095,
+  },
+  neuraldine: {
+    camRadius: 12.8,
+    camPolar: 95,
+    camAzimuth: 24,
+    shiftX: -0.32,
+    breath: 1,
+    twist: 0.85,
+    flow: 0.35,
+    flip: 0.65,
+    signals: 1.6,
+    signalSpeed: 1.8,
+    spin: 1.6,
+    tintR: 1.0,
+    tintG: 0.88,
+    tintB: 0.82,
+    roughness: 0.22,
+    glowR: 1.0,
+    glowG: 0.27,
+    glowB: 0.0,
+    glowIntensity: 0.095,
+  },
+  "restaurant-pos": {
+    camRadius: 12.8,
+    camPolar: 95,
+    camAzimuth: 24,
+    shiftX: -0.32,
+    breath: 1,
+    twist: 0.85,
+    flow: 0.35,
+    flip: 0.65,
+    signals: 1.6,
+    signalSpeed: 1.8,
+    spin: 1.6,
+    tintR: 1.0,
+    tintG: 0.88,
+    tintB: 0.82,
+    roughness: 0.22,
+    glowR: 1.0,
+    glowG: 0.27,
+    glowB: 0.0,
+    glowIntensity: 0.095,
+  },
+  pos: {
+    camRadius: 12.8,
+    camPolar: 95,
+    camAzimuth: 24,
+    shiftX: -0.32,
+    breath: 1,
+    twist: 0.85,
+    flow: 0.35,
+    flip: 0.65,
+    signals: 1.6,
+    signalSpeed: 1.8,
+    spin: 1.6,
+    tintR: 1.0,
+    tintG: 0.88,
+    tintB: 0.82,
+    roughness: 0.22,
+    glowR: 1.0,
+    glowG: 0.27,
+    glowB: 0.0,
+    glowIntensity: 0.095,
+  },
+
+  // 02 Lumen (Legacy alias)
   lumen: {
     camRadius: 12.8,
     camPolar: 95,
@@ -436,6 +543,107 @@ export const KEYFRAMES: Record<string, Partial<Params>> = {
     glowIntensity: 0.075,
   },
 
+  // Work aliases by index (work-1 to work-5)
+  "work-1": {
+    camRadius: 12.5,
+    camPolar: 74,
+    camAzimuth: -30,
+    shiftX: 0.32,
+    data: 1,
+    sort: 1,
+    twist: 0.5,
+    flip: 0.15,
+    signals: 1.4,
+    tintR: 1.0,
+    tintG: 0.95,
+    tintB: 0.88,
+    roughness: 0.22,
+    glowR: 0.91,
+    glowG: 0.64,
+    glowB: 0.37,
+    glowIntensity: 0.09,
+  },
+  "work-2": {
+    camRadius: 12.8,
+    camPolar: 95,
+    camAzimuth: 24,
+    shiftX: -0.32,
+    breath: 1,
+    twist: 0.85,
+    flow: 0.35,
+    flip: 0.65,
+    signals: 1.6,
+    signalSpeed: 1.8,
+    spin: 1.6,
+    tintR: 1.0,
+    tintG: 0.88,
+    tintB: 0.82,
+    roughness: 0.22,
+    glowR: 1.0,
+    glowG: 0.27,
+    glowB: 0.0,
+    glowIntensity: 0.095,
+  },
+  "work-3": {
+    camRadius: 13.2,
+    camPolar: 42,
+    camAzimuth: 14,
+    shiftX: 0.32,
+    data: 1,
+    sort: 1,
+    twist: 0.4,
+    flow: 0.1,
+    flip: 0.3,
+    signals: 1.2,
+    tintR: 0.82,
+    tintG: 0.98,
+    tintB: 0.95,
+    roughness: 0.25,
+    glowR: 0.36,
+    glowG: 0.92,
+    glowB: 0.83,
+    glowIntensity: 0.085,
+  },
+  "work-4": {
+    camRadius: 12.5,
+    camPolar: 100,
+    camAzimuth: -20,
+    shiftX: -0.3,
+    heightMul: 1.25,
+    twist: 0.75,
+    signals: 2.0,
+    signalSpeed: 2.4,
+    spin: 2.2,
+    flip: 0.45,
+    tintR: 1.0,
+    tintG: 0.92,
+    tintB: 0.82,
+    roughness: 0.28,
+    glowR: 1.0,
+    glowG: 0.7,
+    glowB: 0.28,
+    glowIntensity: 0.08,
+  },
+  "work-5": {
+    camRadius: 12.6,
+    camPolar: 85,
+    camAzimuth: 35,
+    shiftX: 0.3,
+    breath: 1.4,
+    twist: 0.6,
+    flow: 0.18,
+    flip: 0.5,
+    signals: 1.1,
+    tintR: 1.0,
+    tintG: 0.86,
+    tintB: 0.82,
+    roughness: 0.24,
+    glowR: 1.0,
+    glowG: 0.48,
+    glowB: 0.35,
+    glowIntensity: 0.085,
+  },
+
   impact: {
     camRadius: 15.5,
     camPolar: 84,
@@ -464,6 +672,21 @@ export const KEYFRAMES: Record<string, Partial<Params>> = {
   },
 };
 
-export function resolveKeyframe(id: string): Params {
-  return { ...BASE, ...(KEYFRAMES[id] ?? {}) };
+export function resolveKeyframe(id: string, fallbackId?: string): Params {
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const found =
+    KEYFRAMES[id] ??
+    KEYFRAMES[norm(id)] ??
+    (fallbackId ? (KEYFRAMES[fallbackId] ?? KEYFRAMES[norm(fallbackId)]) : undefined);
+
+  if (found) return { ...BASE, ...found };
+
+  // Fallback for work items: ensure correct side if not specifically mapped
+  if (fallbackId && /^work-(\d+)$/i.test(fallbackId)) {
+    const num = parseInt(fallbackId.replace(/^work-/i, ""), 10);
+    const isEven = num % 2 === 0; // Work 2, 4 are even -> card on right -> sculpture on left
+    return { ...BASE, shiftX: isEven ? -0.32 : 0.32 };
+  }
+
+  return { ...BASE };
 }

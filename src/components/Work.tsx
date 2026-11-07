@@ -83,7 +83,12 @@ function ProjectBlock({
 
   return (
     <article ref={ref} aria-labelledby={`${p.id}-title`} className="relative h-[155svh]">
-      <div data-kf={p.id} aria-hidden="true" className="pointer-events-none absolute left-0 top-[25svh] h-px w-px" />
+      <div
+        data-kf={p.id}
+        data-kf-fallback={`work-${index + 1}`}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-[25svh] h-px w-px"
+      />
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         {/* Sculpture cursor focus trigger */}
         <div
