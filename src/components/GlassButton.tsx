@@ -1,6 +1,7 @@
 import { type MouseEvent, type ReactNode } from "react";
 import { ArrowUpRight } from "lucide-react";
 import LiquidGlass from "./LiquidGlass";
+import { Magnetic } from "./Magnetic";
 import { scrollToTarget } from "../lib/runtime";
 
 export function GlassButton({
@@ -10,8 +11,11 @@ export function GlassButton({
   tone = "dark",
   size = "md",
   className = "",
+  containerClassName = "",
   icon,
   external,
+  magnetic = true,
+  strength = 0.2,
 }: {
   children: ReactNode;
   href?: string;
@@ -19,8 +23,11 @@ export function GlassButton({
   tone?: "dark" | "light";
   size?: "sm" | "md" | "lg";
   className?: string;
+  containerClassName?: string;
   icon?: ReactNode;
   external?: boolean;
+  magnetic?: boolean;
+  strength?: number;
 }) {
   const handleClick = (e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
     if (href && href.startsWith("#")) {
@@ -57,9 +64,10 @@ export function GlassButton({
   const isLink = Boolean(href);
   const AsTag = isLink ? "a" : "button";
 
-  return (
+  const button = (
     <LiquidGlass
       as={AsTag}
+      data-cursor="link"
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
@@ -92,4 +100,15 @@ export function GlassButton({
       </span>
     </LiquidGlass>
   );
+
+  if (magnetic) {
+    return (
+      <Magnetic strength={strength} className={containerClassName}>
+        {button}
+      </Magnetic>
+    );
+  }
+
+  return button;
 }
+

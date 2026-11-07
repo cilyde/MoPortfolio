@@ -247,7 +247,7 @@ export function Nav() {
               aria-label={open ? navConfig.mobileMenu.closeLabel : navConfig.mobileMenu.openLabel}
               aria-expanded={open}
               data-cursor="link"
-              className="mono text-bone wide:hidden px-3 py-1.5 rounded-full border border-bone/20 bg-ink/60 text-xs tracking-wider"
+              className="mono text-bone wide:hidden inline-flex items-center justify-center w-[72px] py-1.5 rounded-full border border-bone/20 bg-ink/60 text-xs tracking-wider shrink-0 text-center select-none"
             >
               {open ? navConfig.mobileMenu.closeText : navConfig.mobileMenu.openText}
             </button>
