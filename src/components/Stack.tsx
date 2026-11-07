@@ -12,6 +12,7 @@ export function Stack() {
 
   return (
     <section ref={ref} aria-labelledby="stack-title" className="relative py-16 sm:py-20 px-[var(--gutter)] border-t border-bone/10">
+      <div data-kf="stack" aria-hidden="true" className="pointer-events-none absolute left-0 top-0 h-px w-px" />
       <div className={`rvl w-full max-w-6xl mx-auto ${viewClass(view)}`}>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 sm:pb-8">
           <div>

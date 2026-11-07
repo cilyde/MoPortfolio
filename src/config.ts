@@ -544,7 +544,7 @@ export const config = {
         ],
       },
       {
-        period: "2022 — 2025",
+        period: "2024 — 2025",
         current: false,
         role: "Freelance Developer",
         location: "London / Remote",
@@ -555,7 +555,7 @@ export const config = {
         ],
       },
       {
-        period: "2019 — 2020",
+        period: "2022 — 2023",
         current: false,
         role: "Flutter Developer",
         company: "Mentorow",

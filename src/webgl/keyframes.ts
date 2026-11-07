@@ -657,6 +657,32 @@ export const KEYFRAMES: Record<string, Partial<Params>> = {
     glowIntensity: 0.06,
   },
 
+  stack: {
+    camRadius: 15.5,
+    camPolar: 84,
+    camAzimuth: -45,
+    shiftX: 0,
+    twist: 0.9,
+    spin: 1.2,
+    breath: 0.3,
+    flow: 0.1,
+    signals: 1.0,
+    glowIntensity: 0.06,
+  },
+
+  experience: {
+    camRadius: 15.5,
+    camPolar: 84,
+    camAzimuth: -45,
+    shiftX: 0,
+    twist: 0.9,
+    spin: 1.2,
+    breath: 0.3,
+    flow: 0.1,
+    signals: 1.0,
+    glowIntensity: 0.06,
+  },
+
   "closing-line": closingLine,
   "closing-horizon": {
     ...closingLine,
