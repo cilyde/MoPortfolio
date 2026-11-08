@@ -107,10 +107,10 @@ export function Hero() {
           {/* Main Title: Refined Serif with elegant italic surname */}
           <h1
             data-reveal="name"
-            className="display text-[clamp(2.8rem,11.5vw,4.8rem)] leading-[0.92] tracking-[-0.025em] wide:text-[clamp(5.5rem,10.5vw,12.5rem)] wide:leading-[0.88] text-bone"
+            className="display text-[clamp(2.8rem,11.5vw,4.8rem)] leading-[0.92] tracking-[-0.025em] wide:text-[clamp(5.5rem,10.5vw,12.5rem)] wide:leading-[0.88] text-bone [filter:drop-shadow(0_1px_3px_rgba(7,7,9,0.95))_drop-shadow(0_3px_14px_rgba(7,7,9,0.8))] wide:[filter:none]"
           >
             <SplitChars text={site.first} className="block" />
-            <span className="block pl-[0.35em] sm:pl-[0.55em] italic text-bone/90 font-serif">
+            <span className="block pl-[0.35em] sm:pl-[0.55em] pr-[0.35em] sm:pr-[0.55em] italic text-bone/90 font-serif">
               <SplitChars text={site.last} offset={7} />
             </span>
           </h1>
@@ -118,7 +118,7 @@ export function Hero() {
           {/* Subtitle / Intro */}
           <p
             data-reveal="intro"
-            className="mt-3 max-w-[32rem] text-[13.5px] sm:text-[15px] leading-[1.55] sm:leading-[1.65] text-mist/95 wide:mt-8 wide:text-[17px]"
+            className="mt-3 max-w-[32rem] text-[13.5px] sm:text-[15px] leading-[1.55] sm:leading-[1.65] text-mist/95 wide:mt-8 wide:text-[17px] [filter:drop-shadow(0_1px_3px_rgba(7,7,9,0.9))] wide:[filter:none]"
           >
             <SplitWords text={site.intro} />
           </p>

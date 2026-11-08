@@ -17,7 +17,7 @@ export function SplitChars({ text, className, offset = 0 }: SplitProps) {
       <span aria-hidden="true">
         {words.map((word, wi) => (
           <span key={wi} className="inline-block whitespace-nowrap">
-            <span className="inline-block overflow-hidden align-top">
+            <span className="inline-block overflow-hidden align-top pr-[0.35em] -mr-[0.35em] pl-[0.1em] -ml-[0.1em]">
               {Array.from(word).map((c, ci) => (
                 <span key={ci} className="ch inline-block will-change-transform" style={{ "--i": i++ } as CSSProperties}>
                   {c}
@@ -41,7 +41,7 @@ export function SplitWords({ text, className }: SplitProps) {
       <span aria-hidden="true">
         {words.map((w, i) => (
           <span key={i} className="inline-block whitespace-nowrap">
-            <span className="inline-block overflow-hidden align-top">
+            <span className="inline-block overflow-hidden align-top pr-[0.35em] -mr-[0.35em] pl-[0.1em] -ml-[0.1em]">
               <span className="wd inline-block will-change-transform">{w}</span>
             </span>
             {i < words.length - 1 ? <span className="inline-block">&nbsp;</span> : null}
