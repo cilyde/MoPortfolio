@@ -8,10 +8,12 @@ export function Magnetic({ children, strength = 0.32, className = "" }: { childr
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || runtime.caps?.touch || runtime.caps?.reducedMotion) return;
+    const isTouch = runtime.caps?.touch || (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches);
+    if (!el || isTouch || runtime.caps?.reducedMotion) return;
     const xTo = gsap.quickTo(el, "x", { duration: 0.9, ease: "elastic.out(1, 0.45)" });
     const yTo = gsap.quickTo(el, "y", { duration: 0.9, ease: "elastic.out(1, 0.45)" });
     const move = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
       const r = el.getBoundingClientRect();
       xTo((e.clientX - (r.left + r.width / 2)) * strength);
       yTo((e.clientY - (r.top + r.height / 2)) * strength);

@@ -124,12 +124,16 @@ export class Experience {
 
     this.stats = { twistDeg: 0, fNumber: 1.4, members: this.sculpture.rods.count, flow: 0, order: 0, attention: 0 };
 
-    // HDR + MSAA render target so thin members stay crisp and glints can bloom
+    // HDR + MSAA render target so thin members stay crisp and glints can bloom.
+    // On mobile / touch devices (tier < 2 or touch), multisampled float buffers are not
+    // supported by WebGL2 (iOS Safari / WebKit throws FRAMEBUFFER_INCOMPLETE_MULTISAMPLE),
+    // so MSAA is safely restricted to desktop tier 2.
     const ext = this.renderer.extensions;
     const hdr = ext.has("EXT_color_buffer_float") || ext.has("EXT_color_buffer_half_float");
+    const samples = caps.tier >= 2 && !caps.touch ? 4 : 0;
     const rt = new THREE.WebGLRenderTarget(2, 2, {
       type: hdr ? THREE.HalfFloatType : THREE.UnsignedByteType,
-      samples: 4,
+      samples,
       depthBuffer: true,
     });
     this.composer = new EffectComposer(this.renderer, rt);
@@ -193,7 +197,10 @@ export class Experience {
   async warmup() {
     try {
       this.update(1 / 60, true);
-      await this.renderer.compileAsync(this.scene, this.camera);
+      await Promise.race([
+        this.renderer.compileAsync(this.scene, this.camera),
+        new Promise((r) => setTimeout(r, 600)),
+      ]);
     } catch {
       /* compile on first render instead */
     }

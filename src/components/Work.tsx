@@ -1,4 +1,4 @@
-import { useState, useEffect, type CSSProperties } from "react";
+import { useState, useEffect, useRef, type CSSProperties, type TouchEvent } from "react";
 import { Sparkles, Eye, ArrowUpRight } from "lucide-react";
 import { config, type Project } from "../config";
 import { useViewState, viewClass } from "../lib/runtime";
@@ -89,10 +89,51 @@ function ProjectBlock({
 
   // Preload and decode project image as user approaches this project
   useEffect(() => {
-    if (view !== "none") {
+    if (view !== "below") {
       preloadImage(p.image);
     }
   }, [view, p.image]);
+
+  const touchStartRef = useRef<{ x: number; y: number; scrollY: number; time: number } | null>(null);
+  const lastTouchTapRef = useRef<number>(0);
+
+  const handleTouchStart = (e: TouchEvent) => {
+    preloadImage(p.image);
+    const t = e.touches[0];
+    if (t) {
+      touchStartRef.current = {
+        x: t.clientX,
+        y: t.clientY,
+        scrollY: window.scrollY,
+        time: Date.now(),
+      };
+    }
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    if (t) {
+      const dx = t.clientX - start.x;
+      const dy = t.clientY - start.y;
+      const dist = Math.hypot(dx, dy);
+      const scrollDelta = Math.abs(window.scrollY - start.scrollY);
+      const elapsed = Date.now() - start.time;
+      // Generous tap threshold: triggers on first tap even if subtle scroll inertia or finger jitter occurs
+      if (elapsed < 450 && dist < 20 && scrollDelta < 12) {
+        lastTouchTapRef.current = Date.now();
+        onOpenPreview();
+      }
+    }
+  };
+
+  const handleClick = () => {
+    // Prevent duplicate opening if handleTouchEnd already handled this gesture within 500ms
+    if (Date.now() - lastTouchTapRef.current < 500) return;
+    onOpenPreview();
+  };
 
   return (
     <article ref={ref} aria-labelledby={`${p.id}-title`} className="relative h-[155svh]">
@@ -154,15 +195,21 @@ function ProjectBlock({
                 <LiquidGlass
                   as="button"
                   type="button"
-                  onClick={onOpenPreview}
-                  onMouseEnter={() => preloadImage(p.image)}
-                  onTouchStart={() => preloadImage(p.image)}
+                  onClick={handleClick}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                  onTouchCancel={() => {
+                    touchStartRef.current = null;
+                  }}
+                  onPointerEnter={(e) => {
+                    if (e.pointerType !== "touch") preloadImage(p.image);
+                  }}
                   onFocus={() => preloadImage(p.image)}
                   data-cursor="preview"
                   radius={24}
                   tone="dark"
                   blur={0.4}
-                  className="group inline-flex transition-transform duration-300 hover:scale-[1.03] active:scale-[0.97]"
+                  className="group inline-flex touch-manipulation select-none transition-transform duration-300 active:scale-[0.97] wide:hover:scale-[1.03]"
                   contentClassName="flex items-center gap-2.5 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-bone"
                 >
                   <span className="relative flex h-2 w-2">
@@ -173,7 +220,7 @@ function ProjectBlock({
                     <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: p.accent }} />
                   </span>
                   <span>{workConfig.previewButton}</span>
-                  <Eye className="h-3.5 w-3.5 text-mist transition-transform group-hover:scale-110 group-hover:text-bone" />
+                  <Eye className="h-3.5 w-3.5 text-mist transition-transform wide:group-hover:scale-110 wide:group-hover:text-bone" />
                 </LiquidGlass>
               </Magnetic>
               <span className="mono text-[10px] text-ash hidden sm:inline">{workConfig.previewPrompt}</span>

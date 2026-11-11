@@ -96,6 +96,7 @@ export default function LiquidGlass<T extends ElementType = "div">({
       el.style.setProperty("--lg-angle", `${ang.toFixed(1)}deg`);
     };
     const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
       ex = e.clientX;
       ey = e.clientY;
       if (!raf) raf = requestAnimationFrame(update);

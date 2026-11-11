@@ -16,9 +16,10 @@ export function detectCapabilities(): Capabilities {
   let webgl = false;
   try {
     const canvas = document.createElement("canvas");
-    const gl = canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true }) as WebGL2RenderingContext | null;
+    // Avoid failIfMajorPerformanceCaveat: true because mobile GPUs / power-saver profiles
+    // often flag caveats despite being fully capable of 60/120fps WebGL rendering.
+    const gl = (canvas.getContext("webgl2") || canvas.getContext("webgl")) as WebGLRenderingContext | null;
     webgl = !!gl;
-    gl?.getExtension("WEBGL_lose_context")?.loseContext();
   } catch {
     webgl = false;
   }

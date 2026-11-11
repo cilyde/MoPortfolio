@@ -53,8 +53,8 @@ export default function App() {
 
   // Hide the interface before first paint; the opening sequence reveals it
   useLayoutEffect(() => {
-    if (!caps.reducedMotion) prepareUI();
-  }, [caps]);
+    prepareUI();
+  }, []);
 
   // Smooth Lenis scrolling
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function App() {
         if (introState.current === "done") {
           exp.director.introActive = false;
           exp.startMonitoring();
-        } else if (!caps.reducedMotion) {
+        } else {
           prepareIntroScene(exp);
         }
       } catch (err) {
@@ -132,7 +132,7 @@ export default function App() {
       lockScroll(true);
       const fonts = Promise.race([
         document.fonts?.ready ?? Promise.resolve(),
-        new Promise((r) => setTimeout(r, 2200)),
+        new Promise((r) => setTimeout(r, 1000)),
       ]);
       const compiled = exp ? exp.warmup() : Promise.resolve();
       Promise.all([fonts, compiled]).then(() => {

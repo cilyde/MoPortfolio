@@ -92,8 +92,8 @@ export function runIntro(exp: Experience | null, opts: IntroOptions): () => void
   const removeBoot = () => boot?.remove();
 
   let finished = false;
-  const listeners: [string, EventListener][] = [];
-  const cleanup = () => listeners.forEach(([ev, fn]) => window.removeEventListener(ev, fn));
+  const cleanups: (() => void)[] = [];
+  const cleanup = () => cleanups.forEach((fn) => fn());
 
   const finish = () => {
     if (finished) return;
@@ -109,13 +109,21 @@ export function runIntro(exp: Experience | null, opts: IntroOptions): () => void
   };
 
   if (opts.reduced) {
-    if (exp) {
-      Object.assign(exp.director.current, BASE);
-      Object.assign(exp.intro, { t0: 1, t1: 1, t2: 1, t3: 1, t4: 1 });
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" }, onComplete: finish });
+    const c = exp?.director.current;
+    if (exp && c) {
+      prepareIntroScene(exp);
+      tl.to(c, { emerge: -0.09, duration: 1.0, ease: "power2.out" }, 0.15);
+      tl.to(c, { lineCenter: 0, emerge: 1, duration: 1.2, ease: "power2.inOut" }, 1.3);
+      tl.to(exp.intro, { t0: 1, t1: 1, t2: 1, t3: 1, t4: 1, duration: 1.2, ease: "power2.out" }, 1.5);
+      tl.to(c, { ...BASE, duration: 1.2 }, 1.6);
     }
-    const tl = gsap.timeline({ onComplete: finish });
-    if (boot) tl.to(boot, { opacity: 0, duration: 0.5, ease: "none" });
-    else tl.set({}, {}, 0.01);
+    if (boot) tl.to(boot, { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: removeBoot }, 0.05);
+    if (caption.length) {
+      tl.fromTo(caption, { opacity: 0 }, { opacity: 1, duration: 0.8 }, 0.35);
+      tl.to(caption, { opacity: 0, duration: 0.5 }, exp ? 1.7 : 1.4);
+    }
+    revealUI(tl, exp ? 2.6 : 1.6);
     return () => {
       tl.kill();
       cleanup();
@@ -185,15 +193,33 @@ export function runIntro(exp: Experience | null, opts: IntroOptions): () => void
 
   if (opts.quick) tl.timeScale(1.25);
 
-  const speedUp = () => {
+  const allowSkipAfter = Date.now() + 1200;
+  const speedUp = (force = false) => {
     if (finished) return;
-    tl.timeScale(5);
+    if (!force && Date.now() < allowSkipAfter) return;
+    tl.timeScale(4);
     if (skip.length) gsap.to(skip, { autoAlpha: 0, duration: 0.25, overwrite: true });
   };
-  (["pointerdown", "keydown", "wheel", "touchstart"] as const).forEach((ev) => {
-    const fn: EventListener = () => speedUp();
+
+  skip.forEach((el) => {
+    const onSkip = (e: Event) => {
+      e.stopPropagation();
+      speedUp(true);
+    };
+    el.addEventListener("click", onSkip);
+    cleanups.push(() => el.removeEventListener("click", onSkip));
+  });
+
+  (["wheel", "keydown"] as const).forEach((ev) => {
+    const fn: EventListener = () => speedUp(true);
     window.addEventListener(ev, fn, { passive: true });
-    listeners.push([ev, fn]);
+    cleanups.push(() => window.removeEventListener(ev, fn));
+  });
+
+  (["pointerdown", "touchstart"] as const).forEach((ev) => {
+    const fn: EventListener = () => speedUp(false);
+    window.addEventListener(ev, fn, { passive: true });
+    cleanups.push(() => window.removeEventListener(ev, fn));
   });
 
   return () => {
